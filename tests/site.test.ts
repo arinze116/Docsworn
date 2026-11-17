@@ -4,6 +4,15 @@ import { describe, expect, it } from "vitest";
 
 import { parseRepositoryUrl } from "../public/app.js";
 
+function readPngDimensions(buffer: Buffer) {
+  const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  expect(buffer.subarray(0, 8)).toEqual(pngSignature);
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
+}
+
 describe("R-BROWSER-DEMO-1 Vercel browser demo", () => {
   it("ships the semantic repository-to-report interaction at the root", async () => {
     const [html, css, javascript] = await Promise.all([
@@ -26,11 +35,53 @@ describe("R-BROWSER-DEMO-1 Vercel browser demo", () => {
     expect(html).toContain('id="report"');
     expect(html).toContain("Captured deterministic Kane evidence");
     expect(html).toContain("Real repository and Kane execution remain in the local CLI");
+    expect(html).toContain('href="/brand/favicon.svg"');
+    expect(html).toContain('href="/brand/apple-touch-icon.png"');
+    expect(html).toContain('src="/brand/mark-light.svg"');
     expect(html).toContain('<script type="module" src="/app.js"></script>');
     expect(html).not.toMatch(/ANTHROPIC_API_KEY|KANE_API_KEY|GEMINI_API_KEY|LT_ACCESS_KEY/);
     expect(javascript).not.toMatch(/fetch\s*\(|XMLHttpRequest|WebSocket/);
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain(":focus-visible");
+  });
+
+  it("ships the complete witness-mark identity family", async () => {
+    const svgAssets = [
+      "public/brand/logo-primary.svg",
+      "public/brand/logo-primary-dark.svg",
+      "public/brand/logo-primary-mono.svg",
+      "public/brand/logo-compact.svg",
+      "public/brand/logo-compact-dark.svg",
+      "public/brand/logo-wordmark.svg",
+      "public/brand/logo-wordmark-dark.svg",
+      "public/brand/mark-light.svg",
+      "public/brand/mark-dark.svg",
+      "public/brand/mark-mono.svg",
+      "public/brand/favicon.svg",
+    ];
+    const svgContents = await Promise.all(svgAssets.map((asset) => readFile(asset, "utf8")));
+
+    for (const svg of svgContents) {
+      expect(svg).toContain("<svg");
+      expect(svg).toContain("viewBox=");
+      expect(svg).not.toMatch(/checkmark|shield|sparkle/i);
+    }
+
+    const rasterAssets = [
+      ["public/brand/favicon-16.png", 16, 16],
+      ["public/brand/favicon-32.png", 32, 32],
+      ["public/brand/apple-touch-icon.png", 180, 180],
+      ["public/brand/app-icon-512.png", 512, 512],
+      ["public/brand/social-avatar.png", 1200, 1200],
+      ["public/brand/logo-primary.png", 1200, 264],
+      ["public/brand/logo-compact.png", 800, 170],
+    ] as const;
+
+    for (const [asset, expectedWidth, expectedHeight] of rasterAssets) {
+      const dimensions = readPngDimensions(await readFile(asset));
+      expect(dimensions.width).toBe(expectedWidth);
+      expect(dimensions.height).toBe(expectedHeight);
+    }
   });
 
   it("accepts only canonical public HTTPS GitHub repository URLs", () => {

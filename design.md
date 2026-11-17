@@ -1,141 +1,141 @@
-# Docsworn web design system
+# Docsworn web and identity system
 
-## Product context
+## Product truth
 
-Docsworn is a local-first CLI that turns behavioral documentation claims into Kane CLI tests and a Documentation Truth Report. The Vercel site is an interactive static browser demo, not a hosted audit runner. Its first job is to expose the product's repository-to-report interaction at the root URL; its second is to show a real labelled captured report and route developers to the live CLI without inventing runtime capabilities.
+Docsworn is a local-first CLI that turns behavioral documentation claims into Kane CLI tests and a Documentation Truth Report. The Vercel site is an interactive static demonstration. It must make the repository URL input obvious at the root URL, preserve invalid/loading/success states, show a real labelled captured report and direct people to the local CLI without implying that Vercel clones repositories or executes Kane.
 
-Audience: KaneCLI hackathon judges, OSS maintainers, solo developers and technical writers. Primary device contexts: judge laptop at 1440 px, tablet at 768 px and phone at 390 px.
+Audience: KaneCLI hackathon judges, OSS maintainers, solo developers and technical writers. Priority viewports: 1440 px laptop, 768 px tablet and 390 px phone.
 
-## Direction: the evidence docket
+## Direction: the sworn record
 
-Emotional character: rigorous, candid and quietly memorable. The page should feel like a technical document placed under oath—cool paper, dark ink, source-line annotations, stamped statuses and concise findings. Boldness is spent on the opening statement and the truth score; everything else serves evidence readability.
+Character: forensic, editorial, candid and slightly confrontational. The page should feel like a developer tool crossed with a sworn statement: warm paper outside, hard black evidence surfaces inside, and affidavit red marking the exact claim under scrutiny.
 
-Reference-informed patterns:
+The opening promise is direct: **“Documentation is not evidence. Until it survives the product.”** The visible verification desk sits beside it in the first viewport. Below, a compact pipeline leads directly into the result rather than a generic feature grid.
 
-- Cursor: editorial headline plus a large technical proof surface.
-- Incident/root-cause dashboard: observations, cause and resolution arranged as a readable narrative.
-- SEO audit report: compact score summary and grouped textual statuses.
-- AlphaOS: thesis and code artefact share the opening viewport.
+Reference synthesis and source metadata live in `docs/design-references/reference-notes.md`.
 
-See `docs/design-references/reference-notes.md` for the full source record.
+## Identity
 
-## Layout
+### Witness mark
 
-```text
-┌──────────────────────────────────────────────────────────────┐
-│ Docsworn                         Report · Method · Quickstart │
-├──────────────────────────────────────────────────────────────┤
-│ YOUR DOCS MADE CLAIMS.          ┌───────────────────────────┐│
-│ WE BROUGHT RECEIPTS.            │ Repository URL            ││
-│ short explanation               │ [github.com/owner/repo   ]││
-│                                 │ [Run documentation check] ││
-│                                 └───────────────────────────┘│
-├──────────────────────────────────────────────────────────────┤
-│ Live status → submitted repository → captured truth score   │
-├──────────────────────────────────────────────────────────────┤
-│ docs → claims → Kane → observations → suggested wording     │
-├──────────────────────────────────────────────────────────────┤
-│ Evidence docket: five source-linked claim records            │
-├──────────────────────────────────────────────────────────────┤
-│ Quickstart terminal                 Limits / exact status     │
-└──────────────────────────────────────────────────────────────┘
-```
+Two square brackets frame a red evidence point. The brackets mean source/code context; the point is the isolated behavioral claim. The mark intentionally avoids checkmarks, shields, magic sparkles, document sheets and robot heads.
 
-- Content max width: 1180 px; outer gutters 24 px desktop, 16 px mobile.
-- Desktop hero: 7/5 split; audit form aligns to the opening statement and stays in the first viewport.
-- Claim records: single readable column, not a dense admin dashboard.
-- Breakpoints: 900 px collapses hero; 640 px stacks metadata and actions.
-- Body measure: 60–76 characters; evidence observations may run to 85 in monospace blocks.
+Logo family:
 
-## Tokens
+- Primary: witness mark + Docsworn wordmark + “Documentation under oath”.
+- Compact: witness mark + wordmark.
+- Wordmark: lowercase `docsworn` in a heavy technical sans.
+- Symbol: witness mark alone.
+- Variants: ink-on-paper, paper-on-ink, monochrome.
+
+Minimum symbol size: 16 px digital. Minimum compact lockup width: 112 px. Keep clear space equal to the central evidence-point width on every side.
 
 ### Colour
 
-- `--paper: #F2F3EF` — page background, cool document stock.
-- `--sheet: #FFFFFF` — report surfaces.
-- `--ink: #111318` — primary text.
-- `--muted: #5D625F` — secondary explanation.
-- `--line: #C9CDC6` — borders and ruled separators.
-- `--oath: #163A5F` — brand/action blue.
-- `--verified: #176B47` / pale `#E7F4EC` — passed evidence.
-- `--contradicted: #A9252E` / pale `#FBEAEC` — failed evidence.
-- `--uncertain: #7A5700` / pale `#FFF3CE` — unverifiable/captured caveats.
-- Focus: `#0B63CE` with 3 px outer ring. Status never relies on colour alone.
+- `--paper: #F3EFE5` — warm document field.
+- `--sheet: #FFFCF5` — report and form surfaces.
+- `--ink: #101012` — primary type and black evidence surfaces.
+- `--ink-soft: #26252A` — secondary dark surface.
+- `--muted: #66625B` — explanatory text on paper.
+- `--line: #CFC8BA` — document rules.
+- `--seal: #D4382C` — affidavit red; evidence point and primary emphasis.
+- `--seal-dark: #A9231C` — red text on pale backgrounds.
+- `--verified: #17633D` / pale `#E6F2EA`.
+- `--uncertain: #765400` / pale `#FFF0C2`.
+- `--focus: #1769E0` — 3 px keyboard focus ring.
 
-All normal text targets WCAG 2.1 AA contrast (4.5:1); large display text targets at least 3:1. Ratios are verified during browser QA, not assumed from this file.
+Status always includes a word and a symbol. Red is not used as the only failure cue. All normal text must meet WCAG 2.1 AA contrast.
 
 ### Typography
 
-- Display/body: `Arial`, `Helvetica Neue`, system sans-serif. No network font dependency.
-- Evidence/code: `ui-monospace`, `SFMono-Regular`, `Consolas`, monospace.
-- Display: clamp(2.8rem, 7vw, 6.5rem), 0.92 line height, -0.055em tracking.
-- H2: clamp(1.8rem, 3vw, 3rem), 1.0 line height, -0.035em.
-- H3: 1.15rem / 1.3, -0.01em.
-- Body: 1rem / 1.65; lead 1.15rem / 1.6.
-- Meta/evidence labels: 0.75rem / 1.3, 0.08em uppercase.
-- Numeric truth score uses tabular figures.
+- Display and controls: `Arial`, `Helvetica Neue`, system sans-serif.
+- Editorial accent: `Georgia`, `Times New Roman`, serif; used sparingly for sworn-language contrast.
+- Evidence and source metadata: `ui-monospace`, `SFMono-Regular`, `Consolas`, monospace.
+- H1: clamp(3.4rem, 7.6vw, 7.2rem), 0.88 line height, -0.065em tracking.
+- H2: clamp(2.25rem, 4.5vw, 4.6rem), 0.96 line height, -0.045em.
+- Body: 1rem / 1.6; lead 1.12rem / 1.55.
+- Labels: 0.72–0.78rem, monospace, uppercase, 0.08em tracking.
+- Scores use tabular figures.
 
-### Spacing and structure
+## Page architecture
 
-- Scale: 4, 8, 12, 16, 24, 32, 48, 72, 104 px.
-- Border radius: 0 for docket rules; 8 px for functional controls; 16 px for the score seal only.
-- Borders: 1 px solid `--line`; key section rules 2 px solid `--ink`.
-- Shadow: none on normal cards; score seal uses `0 12px 32px rgba(17,19,24,.08)`.
-- Z-index: header 10; skip link 100. No modal layer.
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ witness mark / Docsworn      Report  Method  CLI  [Run]    │
+├─────────────────────────────────────────────────────────────┤
+│ DOCUMENTATION IS NOT       ┌ VERIFICATION DESK ───────────┐ │
+│ EVIDENCE.                  │ Repository URL               │ │
+│ Until it survives          │ [github.com/owner/repo     ] │ │
+│ the product.               │ [Put the docs under oath]   │ │
+│                            └ captured evidence disclosure ┘ │
+├─────────────────────────────────────────────────────────────┤
+│ README → claims → Kane → observations → corrected wording  │
+├─────────────────────────────────────────────────────────────┤
+│ Generated report: score, counts, source-linked claim rows   │
+├─────────────────────────────────────────────────────────────┤
+│ Method statement                 Local CLI / exact limits    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+- Maximum content width: 1280 px.
+- Gutters: 28 px desktop, 20 px tablet, 16 px mobile.
+- Hero: 7/5 split above 940 px; form remains visible without scrolling at 1440 × 900.
+- Report: one evidence table/list, not a dense analytics dashboard.
+- Breakpoints: 940 px collapses hero; 680 px simplifies navigation and stacks claim comparison; 420 px tightens score layout.
+- No horizontal overflow at 390 px or 200% zoom.
 
 ## Components and states
 
-- Header: wordmark, three anchor links, method action. Mobile wraps without a menu dependency.
-- Hero: evidence-first statement, truthful description and the primary audit form.
-- Audit form: visible label, HTTPS GitHub URL input, one primary submit button, example/validation copy and a clear disclosure that the hosted result uses captured evidence.
-- Run status: a polite live region for validation/loading text; submit button is disabled and relabelled while checking.
-- Truth seal: hidden until a valid submission completes; then shows the submitted repository name, score, numerator/denominator, captured-evidence warning and counts.
-- Method rail: five ordered stages with arrows/text; horizontal desktop, vertical mobile.
-- Claim record: status word/icon, source path/line, documented claim, Kane observation and optional suggested wording. Variants: verified, contradicted, unverifiable.
-- Quickstart: selectable terminal block with command; no fake copy success interaction.
-- Disclosure: clear limitation that the hosted site is static and Kane runs in the CLI.
-- Footer: report, method and quick-start anchors plus the licence disclosure.
+- Header: compact logo, three anchors and a high-contrast action. Mobile navigation wraps; no hidden hamburger dependency.
+- Hero statement: oversized thesis with one editorial serif line and no invented proof.
+- Verification desk: visible label, strict GitHub URL field, primary submit button, constraints and candid captured-evidence disclosure.
+- Run status: polite live region. Button and input disable while checking; progress is text, not a spinner.
+- Pipeline rail: five labelled stages connected by rules; horizontal desktop, stacked mobile.
+- Truth report: submitted repository, giant score, passed/failed/unverifiable counts and a prominent captured-evidence label.
+- Claim row: status, source line, documented claim, Kane observation and optional corrected wording.
+- CLI block: selectable command and deterministic output.
+- Exact status: explicit “is / uses / is not” wording.
 
-Browser demo states:
+Browser states:
 
-- Empty: labelled URL field and enabled submit button; result docket remains hidden.
-- Invalid: input keeps its value, sets `aria-invalid`, and receives a specific inline error plus live announcement.
-- Loading/disabled: button is disabled and reads `Checking documentation…`; a three-stage progress line is announced without looping animation.
-- Success: result heading receives focus, the submitted repository is named, and the captured report reveals verified, contradicted and unverifiable variants.
-- No-JavaScript: the product explanation, local CLI disclosure and quick-start remain readable; the form explains that JavaScript is required for the browser demo.
+- Empty: result hidden; input and submit action visible.
+- Invalid: value retained, `aria-invalid` set, specific inline error and live announcement.
+- Loading: form `aria-busy`; input/button disabled; three status messages.
+- Success: submitted repository is echoed, report reveals, report heading receives focus.
+- No JavaScript: explanation, deployment limits and CLI remain readable.
 
-## Interaction and motion
+## Motion
 
-- Navigation uses in-page anchors with visible focus and scroll margin.
-- Links underline on hover/focus; action buttons shift colour only, 140 ms ease-out.
-- The submitted result reveals without transform motion. Loading uses changing text rather than a spinner.
-- No entrance animation, parallax or looping decoration. Evidence should not move.
-- `prefers-reduced-motion: reduce` disables smooth scrolling and transitions.
-- Hover rules are gated behind `(hover: hover) and (pointer: fine)`.
+- 140 ms colour/border transitions on interactive controls.
+- Result reveal has no transform or entrance choreography.
+- Loading changes text only.
+- No parallax, looping decoration, cursor theatre or ambient particle effects.
+- `prefers-reduced-motion: reduce` removes smooth scroll and transitions.
+- Hover treatments are gated behind `(hover: hover) and (pointer: fine)`.
 
 ## Accessibility
 
-- `lang="en"`, skip link, semantic header/nav/main/section/article/footer and one H1.
-- Logical heading hierarchy and source order identical to visual order.
-- Status includes visible words and symbols; colour is supplementary.
-- Minimum 44 px targets for primary links/actions on mobile.
-- Focus ring is never removed; anchored sections use `scroll-margin-top`.
-- Text remains usable at 200% zoom and at 390 px without horizontal overflow.
-- Decorative marks use `aria-hidden="true"`; no unnecessary ARIA.
+- `lang="en"`, skip link, semantic landmarks, one H1 and logical heading order.
+- Visible labels; no placeholder-only fields.
+- Status uses visible words and symbols.
+- Minimum 44 px actions on mobile.
+- Focus ring is never removed; anchored sections use scroll margin.
+- Decorative SVG is hidden from assistive technology; logo links have an accessible name.
+- Interface must work by keyboard and remain readable in forced/reduced-motion contexts.
 
 ## Performance and deployment
 
-- Original static HTML, CSS and a small ES module only; no framework, analytics, external fonts or production images.
-- Target: under 45 KB transferred before compression, excluding platform headers.
-- Vercel serves only the static proof surface. No Gemini/Kane/Anthropic secret is required or exposed.
-- Security headers: nosniff, frame deny, strict referrer policy and restrictive permissions policy.
+- Static HTML, CSS, small ES module and original SVG/raster identity assets only.
+- No framework, analytics, external font or production reference imagery.
+- HTML + CSS + JavaScript target: under 52 KB uncompressed. Identity files are cached static assets.
+- Vercel exposes no Gemini, Anthropic or Kane credential.
+- Existing restrictive security headers remain.
 
-## Product-specific anti-patterns
+## Anti-patterns
 
-- Never imply the Vercel page can execute Kane, clone repositories or inspect the submitted URL.
-- Never call captured fixture evidence a live run.
-- Never make the submitted repository name look like proof that its contents were audited.
-- Never hide failed claims behind an aggregate score.
-- Never add synthetic customer logos, testimonials or adoption metrics.
-- Never use generic AI gradients, glowing agents, glass cards or decorative dashboards.
-- Never turn evidence into a dense chart when plain observations are clearer.
+- Never imply the hosted page executed Kane or inspected the submitted repository.
+- Never call captured fixture evidence a current live run.
+- Never hide contradicted claims behind the aggregate score.
+- Never invent customers, adoption metrics, testimonials or trust badges.
+- Never use generic AI gradients, glass cards, robots, shields, checkmark logos or decorative dashboards.
+- Never copy a reference layout, logo, artwork or template code.

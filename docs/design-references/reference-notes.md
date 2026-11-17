@@ -1,92 +1,85 @@
 # Docsworn web reference notes
 
-Research date: 2026-11-17. Scope: an interactive static judge-facing browser demo for the Docsworn CLI, deployed to Vercel. It must expose the repository-check interaction at the root URL and show real deterministic evidence without implying that Kane runs inside Vercel.
+Research date: 2026-11-17. Scope: redesign the public, static judge-facing surface for the Docsworn CLI while preserving the visible repository check, captured-evidence disclosure, truth report and local-first positioning.
+
+All external work below is reference material only. No template code, artwork, logo or proprietary asset is used in production.
 
 ## Pinterest research
 
 Queries inspected with the global Pinterest MCP:
 
-- `developer tools landing page dark editorial UI`
-- `software testing report dashboard UI documentation`
-- `code audit report web design dashboard`
-- `developer tool repository audit input form UI`
-- `website audit checker form results dashboard UI`
+- `developer tool landing page identity editorial interface`
+- `document verification software branding logo UI`
+- `code audit report dashboard dark red UI`
 
 Selected references:
 
-1. Developer Tool Landing Page with a Dark Product Preview
-   - Pinterest board: https://www.pinterest.com/oronstudio/landing-page-and-website-design/
-   - Image: https://i.pinimg.com/originals/08/7e/b0/087eb009c19905394ace1048a4ced71f.png
-   - Local reference: `pinterest/01_087eb009c19905394ace1048a4ced71f.jpg`
-   - Useful pattern: plain-language claim first, then a large product/evidence surface. Restrained navigation and an interface preview carry more weight than feature-card repetition.
-2. Incident/root-cause analysis dashboard
-   - Pinterest board: https://www.pinterest.com/slavikbushko/dashboards/
-   - Image: https://i.pinimg.com/originals/00/d6/c8/00d6c8fb27647ac0b82c287cae0bdde5.jpg
-   - Local reference: `pinterest/02_00d6c8fb27647ac0b82c287cae0bdde5.jpg`
-   - Useful pattern: narrative evidence sections—what happened, root cause, resolution—are clearer than a generic KPI grid. Status, time and provenance stay close to the incident title.
-3. SEO audit report
-   - Pinterest board: https://www.pinterest.com/RoyalWearStudio/digital-skills-hub/
-   - Image: https://i.pinimg.com/originals/15/5d/78/155d78a62eef18ef40581ed07b40a821.png
-   - Local reference: `pinterest/03_155d78a62eef18ef40581ed07b40a821.jpg`
-   - Useful pattern: a compact score summary followed by grouped pass/warn/fail checks and a conclusion. Status always appears as text plus colour.
-4. Repository audit input composition
-   - Local reference: `pinterest/01_645362a432fb795531f946c480397425.png`
-   - Discovery query: `developer tool repository audit input form UI`
-   - Useful pattern: keep the single high-intent input and primary action visually inseparable in the opening product surface; place constraints immediately below the field.
-5. Website checker results dashboard
-   - Local reference: `pinterest/02_45fe3eef26b8e8a72c29365377fc44fc.jpg`
-   - Discovery query: `website audit checker form results dashboard UI`
-   - Useful pattern: preserve continuity from entered URL to result heading, then lead with a score and plain-language status groups rather than generic charts.
+1. Playerzero editorial developer site
+   - Image: https://i.pinimg.com/originals/f6/c5/69/f6c5699cbcb335a9b6faa306b59ae2fe.png
+   - Local: `pinterest/playerzero-editorial.png`
+   - Useful: a quiet grid, compact navigation, a large technical thesis and evidence connected by fine rules. The dotted display treatment is memorable, but Docsworn will not copy it.
+2. Agentic modular black/white identity
+   - Image: https://i.pinimg.com/originals/dd/7c/8c/dd7c8c71d1bb47ca80a8b04e44a2a272.jpg
+   - Local: `pinterest/agentic-modular.jpg`
+   - Useful: a strict monochrome identity can still feel alive when one transition texture carries the concept. Docsworn adapts the restraint, not the particle field.
+3. Nexora deep-red audit/dashboard system
+   - Image: https://i.pinimg.com/originals/0d/57/26/0d57264b8b2e3df68ace35d463b68ccd.jpg
+   - Local: `pinterest/nexora-audit.jpg`
+   - Useful: deep red gives failed evidence urgency and dark product surfaces make dense results legible. Docsworn uses red as a disciplined evidence accent rather than flooding the full interface.
 
-Pinterest search results did not expose stable individual Pin URLs for these anonymous results. Board/image metadata is recorded where the result provided it; otherwise the exact discovery query and downloaded content-addressed asset are recorded. No Pin URL is invented.
+Earlier report and checker references remain in this folder because they informed the first version. They are not part of the redesign shortlist.
 
 ## Framer Marketplace research
 
-Candidates inspected through their official detail page and live presentation:
+Official detail pages and their live presentations were rendered at 1440 × 1000. The captured review set is in `framer/research-2026-11-17/`.
 
-1. Cursor
+1. AgentLab
+   - Detail: https://www.framer.com/marketplace/templates/agentlab/
+   - Live: https://agentlab.framer.ai/
+   - Useful: editorial serif headline, visible page grid and deliberate black/white controls.
+   - Avoid: the generic AI collage and borrowed trust signals.
+2. Aoutive
+   - Detail: https://www.framer.com/marketplace/templates/aoutive-website/
+   - Live: https://aoutive.framer.website/
+   - Useful: strong centered hierarchy, clear first action and a product diagram that explains flow without a feature-card wall.
+   - Avoid: an oversized decorative illustration before concrete product evidence.
+3. Intelli
+   - Detail: https://www.framer.com/marketplace/templates/intelli/
+   - Live: https://intelli.framer.website/
+   - Useful: confident type over a full-bleed field and a compact two-action opening.
+   - Avoid: atmosphere that competes with the product and low-contrast overlay text.
+4. Cursor
    - Detail: https://www.framer.com/marketplace/templates/cursor/
    - Live: https://cursorswarm.framer.website/
-   - Local screenshot: `framer/cursor.png`
-   - Observation: high-contrast editorial hero, monospace annotations and a large proof canvas. Strong hierarchy; the collaborative cursor theatre is visually memorable but irrelevant to Docsworn.
-2. Fluxbase
-   - Detail: https://www.framer.com/marketplace/templates/fluxbase/
-   - Live: https://fluxbase.framer.website/
-   - Local screenshot: `framer/fluxbase.png`
-   - Observation: confident whitespace and a single visual gesture. Too sparse for an evidence-heavy product but useful as a reminder not to overfill the opening screen.
-3. Alytics
-   - Detail: https://www.framer.com/marketplace/templates/alytics/
-   - Live: https://alytics.framer.website/
-   - Local screenshot: `framer/alytics.png`
-   - Observation: direct headline, one-sentence explanation and immediate product proof. The unsourced trust badge and floating logos are patterns to avoid.
-4. Aigent
-   - Detail: https://www.framer.com/marketplace/templates/aigent/
-   - Live: https://aigentx.framer.website/
-   - Local screenshot: `framer/aigent.png`
-   - Observation: strong dark grid and split composition. The decorative particle sphere and invented customer logos dominate the product and will not be adopted.
+   - Useful: product proof in the first viewport, monospace annotations, scale labels and a composition that visibly behaves like a work surface.
+   - Avoid: decorative agent cursors, purple AI gradients and motion that obscures reading.
 5. AlphaOS
    - Detail: https://www.framer.com/marketplace/templates/alphaos/
    - Live: https://alphaos.framer.website/
-   - Local screenshot: `framer/alphaos.png`
-   - Observation: a useful split between product thesis and a concrete code artefact. Excessive pill navigation and warm gradient decoration are not needed.
+   - Useful: a strong split between thesis and a concrete code artefact.
+   - Avoid: template badges, warm glow decoration and excessive action variants.
 
 ## Shortlist and synthesis
 
-- Cursor: adapt the editorial hierarchy, technical annotations and proof-canvas emphasis.
-- Root-cause dashboard: adapt the evidence narrative and status/provenance adjacency.
-- SEO audit report: adapt the concise score + grouped outcomes + conclusion structure.
-- Repository/checker references: adapt the first-viewport input/action pairing and entered-URL-to-report continuity.
+- Playerzero: adapt the ruled editorial grid and product-specific connective language.
+- AgentLab: adapt the black/white confidence and mixed editorial/technical typography.
+- Cursor: adapt the immediate proof surface and instrument-like annotations.
+- Nexora: adapt the controlled deep-red urgency for contradicted evidence.
 
-The final direction is original: a documentation “docket” on cool paper, using black ink, oath blue, verification green, warning amber and contradiction red. It combines a developer-tool opening with a report that reads like evidence, not a generic SaaS dashboard.
+The resulting direction is original: **the sworn record**. A warm paper field holds an uncompromising black verification desk. A single affidavit-red accent identifies the claim currently under scrutiny. Source lines, brackets and docket numbers become the graphic language. The site remains a readable product demonstration, not a generic dashboard or a fictional live audit.
 
-## Avoid
+## Logo concept
 
-- Purple/blue AI gradients, glowing orbs and decorative particles.
-- Unsourced customer logos, user counts or trust badges.
-- Three interchangeable feature cards.
-- Hiding limitations or presenting captured evidence as a live Kane run.
-- Copying proprietary template artwork, layout, branding, code or assets.
+The symbol is the **witness mark**: two square documentation brackets frame a red evidence point. It represents a claim isolated from prose and placed under test. It does not use a checkmark, shield, sparkle or robot motif. The construction survives at 16 px and works in full colour, reversed and monochrome variants.
+
+Deliverables required by the identity pass:
+
+- Primary lockup, compact lockup, wordmark and standalone symbol.
+- Light, dark and monochrome SVG variants.
+- SVG favicon plus 16 px, 32 px, 180 px and 512 px raster assets.
+- Social avatar raster.
+- Inspection on light/dark backgrounds and at favicon, header and avatar sizes.
 
 ## Copyright and licensing
 
-Pinterest and Framer material is retained only as internal design reference. No referenced image, logo, illustration, template code or proprietary asset is used in the production site. The implementation uses original HTML/CSS and system fonts.
+Pinterest and Framer material is retained only as internal design reference. The production identity, HTML, CSS and SVG geometry are original and use system fonts only.

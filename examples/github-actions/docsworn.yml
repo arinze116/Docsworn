@@ -1,0 +1,60 @@
+name: Documentation truth gate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docsworn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build a pinned Docsworn revision
+        env:
+          DOCSWORN_REF: replace-with-a-commit-sha
+        run: |
+          git clone https://github.com/arinze116/Docsworn.git "$RUNNER_TEMP/docsworn"
+          git -C "$RUNNER_TEMP/docsworn" checkout "$DOCSWORN_REF"
+          npm ci --prefix "$RUNNER_TEMP/docsworn"
+          npm run build --prefix "$RUNNER_TEMP/docsworn"
+
+      - name: Install and authenticate Kane CLI
+        env:
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+        run: |
+          npm install --global @testmuai/kane-cli@0.10.5
+          kane-cli login --username "$LT_USERNAME" --access-key "$LT_ACCESS_KEY"
+
+      - name: Audit documentation promises
+        env:
+          APP_URL: http://127.0.0.1:3000
+        run: |
+          ./scripts/start-test-app.sh &
+          app_pid=$!
+          trap 'kill "$app_pid"' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent "$APP_URL" >/dev/null; then break; fi
+            if [ "$attempt" -eq 30 ]; then echo "Application did not become ready" >&2; exit 1; fi
+            sleep 1
+          done
+          node "$RUNNER_TEMP/docsworn/dist/cli.js" \
+            --repo "$GITHUB_WORKSPACE" \
+            --url "$APP_URL" \
+            --ai off \
+            --fail-under 80
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docsworn-report
+          path: |
+            doctruth-report.md
+            .kane/

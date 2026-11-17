@@ -1,0 +1,26 @@
+[
+  {
+    "sourceFile": "README.md",
+    "line": 7,
+    "status": "failed",
+    "summary": "Expected 'Submit'; actual 'Create account'. The documented button was not present."
+  },
+  {
+    "sourceFile": "README.md",
+    "line": 8,
+    "status": "failed",
+    "summary": "Expected 'Welcome aboard'; actual 'Account queued for review.'."
+  },
+  {
+    "sourceFile": "README.md",
+    "line": 9,
+    "status": "passed",
+    "summary": "The browser blocked submission for an email without an @ symbol."
+  },
+  {
+    "sourceFile": "README.md",
+    "line": 10,
+    "status": "failed",
+    "summary": "Expected '/dashboard'; actual '/register'. The user remained on the registration page."
+  }
+]

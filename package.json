@@ -1,0 +1,51 @@
+{
+  "name": "docsworn",
+  "version": "0.1.0",
+  "description": "Verify documentation claims against a live application with Kane CLI.",
+  "type": "module",
+  "bin": {
+    "docsworn": "dist/cli.js",
+    "doctruth": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "AI_USE.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "ci": "npm run typecheck && npm test && npm run build",
+    "demo": "npm run demo:audit",
+    "demo:app": "node demo/fixture-app/server.mjs",
+    "demo:audit": "npm run build && node dist/cli.js audit --repo demo/fixture-app --url http://127.0.0.1:4173 --results demo/fixture-app/kane-results.json --ai off --output doctruth-report.md --flows-dir .kane-demo",
+    "prepack": "npm run ci"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arinze116/Docsworn.git"
+  },
+  "keywords": [
+    "documentation",
+    "kane-cli",
+    "testing",
+    "cli"
+  ],
+  "dependencies": {
+    "commander": "15.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}

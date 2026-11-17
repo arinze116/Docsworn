@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Docsworn registration fixture</title>
+    <style>
+      body { max-width: 38rem; margin: 4rem auto; padding: 0 1rem; font: 18px/1.5 system-ui, sans-serif; }
+      form { display: grid; gap: 1rem; }
+      input, button { font: inherit; padding: .7rem; }
+      #status { min-height: 1.5rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Create an account</h1>
+      <form id="registration-form">
+        <label>Email <input name="email" type="email" required /></label>
+        <button type="submit">Create account</button>
+      </form>
+      <p id="status" role="status"></p>
+    </main>
+    <script>
+      document.querySelector('#registration-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        document.querySelector('#status').textContent = 'Account queued for review.';
+      });
+    </script>
+  </body>
+</html>

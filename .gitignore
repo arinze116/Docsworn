@@ -7,5 +7,6 @@ coverage/
 .kane/
 .kane-demo/
 .testmuai/evidence/
+.playwright-cli/
 doctruth-report.md
 npm-debug.log*

@@ -18,6 +18,12 @@ npm run demo
 
 The demo reads [`demo/fixture-app/README.md`](demo/fixture-app/README.md), generates Kane `_test.md` files in `.kane-demo/`, and writes `doctruth-report.md` from labelled captured Kane evidence. It intentionally includes three stale claims, one verified claim, and one subjective claim.
 
+## Browser demo
+
+Open [docsworn.vercel.app](https://docsworn.vercel.app), enter a public GitHub repository URL, and run the visible documentation check to exercise the repository-to-report interaction. The hosted page validates the URL and renders the deterministic fixture report with pass, fail and unverifiable results.
+
+The browser result is explicitly labelled captured evidence: Vercel does not clone or inspect the submitted repository and does not execute Kane. Use the local CLI below for a real repository audit.
+
 ## Run against a live application
 
 Install and authenticate Kane CLI first:
@@ -125,7 +131,7 @@ The architecture and boundary rules are recorded in [`docs/SYSTEM.md`](docs/SYST
 
 - Claim extraction is deliberately conservative and currently focuses on Markdown.
 - A failed browser check can indicate stale documentation, a flaky target, or an underspecified generated objective. The report preserves Kane's observation rather than auto-editing source files.
-- OpenAPI ingestion, historical diffing, automatic pull requests, and a web dashboard are not in the MVP.
+- OpenAPI ingestion, historical diffing, automatic pull requests, and a hosted live audit runner are not in the MVP.
 - A live Kane run requires an authenticated Kane CLI installation and an accessible target application.
 
 ## Development

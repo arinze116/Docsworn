@@ -1,7 +1,7 @@
 # ADR-0002: Static Vercel evidence site
 
 - Date: 2026-11-17 UTC
-- Status: accepted
+- Status: superseded by ADR-0003
 - Rule ids: R-STATIC-1, R-SECRET-1
 
 ## Context
@@ -25,3 +25,7 @@ The public URL gives judges an immediate, truthful product overview and report. 
 ## Reversal condition
 
 Revisit when Docsworn has a deliberately designed hosted runner with isolated repository jobs, first-class Kane authentication, explicit data retention and defensive public-endpoint tests.
+
+## Supersession
+
+The no-form/no-JavaScript presentation constraint was superseded on 2026-11-17 by ADR-0003. The security boundary remains: Vercel still does not clone repositories or execute Kane.

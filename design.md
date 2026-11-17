@@ -2,7 +2,7 @@
 
 ## Product context
 
-Docsworn is a local-first CLI that turns behavioral documentation claims into Kane CLI tests and a Documentation Truth Report. The Vercel site is a static judge-facing evidence surface, not a hosted audit runner. Its job is to explain the loop, show a real labelled captured report, and route developers to the quick start without inventing runtime capabilities.
+Docsworn is a local-first CLI that turns behavioral documentation claims into Kane CLI tests and a Documentation Truth Report. The Vercel site is an interactive static browser demo, not a hosted audit runner. Its first job is to expose the product's repository-to-report interaction at the root URL; its second is to show a real labelled captured report and route developers to the live CLI without inventing runtime capabilities.
 
 Audience: KaneCLI hackathon judges, OSS maintainers, solo developers and technical writers. Primary device contexts: judge laptop at 1440 px, tablet at 768 px and phone at 390 px.
 
@@ -26,9 +26,12 @@ See `docs/design-references/reference-notes.md` for the full source record.
 │ Docsworn                         Report · Method · Quickstart │
 ├──────────────────────────────────────────────────────────────┤
 │ YOUR DOCS MADE CLAIMS.          ┌───────────────────────────┐│
-│ WE BROUGHT RECEIPTS.            │ 25% truth score           ││
-│ short explanation + actions     │ evidence mode + counts    ││
+│ WE BROUGHT RECEIPTS.            │ Repository URL            ││
+│ short explanation               │ [github.com/owner/repo   ]││
+│                                 │ [Run documentation check] ││
 │                                 └───────────────────────────┘│
+├──────────────────────────────────────────────────────────────┤
+│ Live status → submitted repository → captured truth score   │
 ├──────────────────────────────────────────────────────────────┤
 │ docs → claims → Kane → observations → suggested wording     │
 ├──────────────────────────────────────────────────────────────┤
@@ -39,7 +42,7 @@ See `docs/design-references/reference-notes.md` for the full source record.
 ```
 
 - Content max width: 1180 px; outer gutters 24 px desktop, 16 px mobile.
-- Desktop hero: 7/5 split; report score aligns to the first headline baseline.
+- Desktop hero: 7/5 split; audit form aligns to the opening statement and stays in the first viewport.
 - Claim records: single readable column, not a dense admin dashboard.
 - Breakpoints: 900 px collapses hero; 640 px stacks metadata and actions.
 - Body measure: 60–76 characters; evidence observations may run to 85 in monospace blocks.
@@ -83,25 +86,29 @@ All normal text targets WCAG 2.1 AA contrast (4.5:1); large display text targets
 ## Components and states
 
 - Header: wordmark, three anchor links, method action. Mobile wraps without a menu dependency.
-- Hero: evidence-first statement, truthful description, repository and report anchors.
-- Truth seal: score, numerator/denominator, captured-evidence warning and counts.
+- Hero: evidence-first statement, truthful description and the primary audit form.
+- Audit form: visible label, HTTPS GitHub URL input, one primary submit button, example/validation copy and a clear disclosure that the hosted result uses captured evidence.
+- Run status: a polite live region for validation/loading text; submit button is disabled and relabelled while checking.
+- Truth seal: hidden until a valid submission completes; then shows the submitted repository name, score, numerator/denominator, captured-evidence warning and counts.
 - Method rail: five ordered stages with arrows/text; horizontal desktop, vertical mobile.
 - Claim record: status word/icon, source path/line, documented claim, Kane observation and optional suggested wording. Variants: verified, contradicted, unverifiable.
 - Quickstart: selectable terminal block with command; no fake copy success interaction.
 - Disclosure: clear limitation that the hosted site is static and Kane runs in the CLI.
 - Footer: report, method and quick-start anchors plus the licence disclosure.
 
-Static page states:
+Browser demo states:
 
-- Success: verified claim variant.
-- Error/contradiction: failed claim variant with replacement wording.
-- Unverifiable: warning variant with reason.
-- Loading/empty/disabled: not applicable because all content is shipped HTML; absence of JavaScript must not remove content.
+- Empty: labelled URL field and enabled submit button; result docket remains hidden.
+- Invalid: input keeps its value, sets `aria-invalid`, and receives a specific inline error plus live announcement.
+- Loading/disabled: button is disabled and reads `Checking documentation…`; a three-stage progress line is announced without looping animation.
+- Success: result heading receives focus, the submitted repository is named, and the captured report reveals verified, contradicted and unverifiable variants.
+- No-JavaScript: the product explanation, local CLI disclosure and quick-start remain readable; the form explains that JavaScript is required for the browser demo.
 
 ## Interaction and motion
 
 - Navigation uses in-page anchors with visible focus and scroll margin.
 - Links underline on hover/focus; action buttons shift colour only, 140 ms ease-out.
+- The submitted result reveals without transform motion. Loading uses changing text rather than a spinner.
 - No entrance animation, parallax or looping decoration. Evidence should not move.
 - `prefers-reduced-motion: reduce` disables smooth scrolling and transitions.
 - Hover rules are gated behind `(hover: hover) and (pointer: fine)`.
@@ -118,15 +125,16 @@ Static page states:
 
 ## Performance and deployment
 
-- Original static HTML and CSS only; no framework, client JavaScript, analytics, external fonts or production images.
-- Target: under 35 KB transferred before compression, excluding platform headers.
+- Original static HTML, CSS and a small ES module only; no framework, analytics, external fonts or production images.
+- Target: under 45 KB transferred before compression, excluding platform headers.
 - Vercel serves only the static proof surface. No Gemini/Kane/Anthropic secret is required or exposed.
 - Security headers: nosniff, frame deny, strict referrer policy and restrictive permissions policy.
 
 ## Product-specific anti-patterns
 
-- Never imply the Vercel page can execute Kane or clone repositories.
+- Never imply the Vercel page can execute Kane, clone repositories or inspect the submitted URL.
 - Never call captured fixture evidence a live run.
+- Never make the submitted repository name look like proof that its contents were audited.
 - Never hide failed claims behind an aggregate score.
 - Never add synthetic customer logos, testimonials or adoption metrics.
 - Never use generic AI gradients, glowing agents, glass cards or decorative dashboards.

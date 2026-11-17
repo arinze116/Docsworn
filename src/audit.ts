@@ -18,6 +18,7 @@ export interface AuditOptions {
   flowsDirectory: string;
   kaneBinary: string;
   kaneTimeoutMs: number;
+  kaneExecutionMode?: "testmd" | "inline";
   capturedResultsPath?: string;
   skipRun: boolean;
   aiMode: "auto" | "gemini" | "off";
@@ -76,6 +77,8 @@ export async function auditDocumentation(options: AuditOptions): Promise<AuditOu
         flows,
         kaneBinary: options.kaneBinary,
         timeoutMs: options.kaneTimeoutMs,
+        executionMode: options.kaneExecutionMode ?? "testmd",
+        startUrl: options.targetUrl,
       });
     }
 

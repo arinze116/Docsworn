@@ -11,6 +11,33 @@ const flow: GeneratedFlow = {
 };
 
 describe("AT-4 Kane result mapping", () => {
+  it("R-HOSTED-DURATION-1 uses Kane's direct run surface for hosted objectives", async () => {
+    let executedArgs: string[] = [];
+    await runKaneFlows({
+      flows: [flow],
+      kaneBinary: "kane-cli",
+      timeoutMs: 100,
+      executionMode: "inline",
+      startUrl: "https://app.example",
+      execute: async (request) => {
+        executedArgs = request.args;
+        return {
+          code: 0,
+          stdout: '{"type":"run_end","status":"passed","summary":"Save worked","test_url":"https://test-manager.lambdatest.com/projects/project/test-cases/case/dashboard/share/token"}\n',
+          stderr: "",
+          durationMs: 12,
+        };
+      },
+    } as Parameters<typeof runKaneFlows>[0]);
+
+    expect(executedArgs.slice(0, 4)).toEqual([
+      "run",
+      flow.objective,
+      "--url",
+      "https://app.example",
+    ]);
+  });
+
   it("maps a structured passing completion", async () => {
     const [result] = await runKaneFlows({
       flows: [flow],

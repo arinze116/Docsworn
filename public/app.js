@@ -44,7 +44,8 @@ export function parseTargetUrl(value) {
 }
 
 function setFieldError(input, error, message) {
-  input.toggleAttribute("aria-invalid", Boolean(message));
+  if (message) input.setAttribute("aria-invalid", "true");
+  else input.removeAttribute("aria-invalid");
   error.textContent = message ?? "";
   error.hidden = !message;
 }
@@ -74,6 +75,13 @@ function correctionText(audited) {
   return "No correction can be suggested until Kane returns product evidence.";
 }
 
+function missingSessionText(status) {
+  if (status === "unverifiable") return "Not created — this claim had no executable Kane pass condition.";
+  if (status === "error") return "Not created — Kane did not complete this claim.";
+  if (status === "pending") return "Not created — this claim was not run.";
+  return "Kane did not return a LambdaTest session link.";
+}
+
 function createEvidenceCard(audited, index) {
   const presentation = statusPresentation(audited.observation.status);
   const article = document.createElement("article");
@@ -100,7 +108,7 @@ function createEvidenceCard(audited, index) {
   appendText(observed, "p", "", audited.observation.summary);
 
   const suggestion = appendText(article, "p", "suggestion", correctionText(audited));
-  const suggestionLabel = appendText(suggestion, "strong", "", "Corrected wording");
+  const suggestionLabel = appendText(suggestion, "strong", "", "Correct the record");
   suggestion.prepend(suggestionLabel);
 
   const session = appendText(article, "p", "session-link", "");
@@ -111,20 +119,67 @@ function createEvidenceCard(audited, index) {
     link.target = "_blank";
     link.rel = "noreferrer";
   } else {
-    appendText(session, "span", "", "Not created — this claim had no executable Kane pass condition.");
+    appendText(session, "span", "", missingSessionText(audited.observation.status));
   }
   return article;
 }
 
+function createEvidencePlaceholder(label, title, detail) {
+  const article = document.createElement("article");
+  article.className = "evidence-empty";
+  const sectionLabel = appendText(article, "p", "section-label", label);
+  const dot = document.createElement("span");
+  dot.setAttribute("aria-hidden", "true");
+  sectionLabel.prepend(dot);
+  appendText(article, "h3", "", title);
+  appendText(article, "p", "", detail);
+  return article;
+}
+
+function resetReportSummary() {
+  const scoreValue = document.querySelector("[data-score-value]");
+  scoreValue.textContent = "N/A";
+  scoreValue.dataset.scoreState = "empty";
+  document.querySelector("[data-score-summary]").textContent = "Waiting for live evidence.";
+  for (const selector of ["[data-count-passed]", "[data-count-failed]", "[data-count-unverifiable]", "[data-count-error]"]) {
+    document.querySelector(selector).textContent = "00";
+  }
+}
+
+function showReportPlaceholder(state, reportTitle, label, title, detail) {
+  const report = document.querySelector("#report");
+  report.dataset.state = state;
+  report.toggleAttribute("aria-busy", state === "loading");
+  document.querySelector("[data-report-title]").innerHTML = reportTitle;
+  resetReportSummary();
+  document.querySelector("#evidence-grid").replaceChildren(createEvidencePlaceholder(label, title, detail));
+}
+
 function renderLiveReport(result) {
   const score = result.summary.accuracyPercent;
-  document.querySelector("[data-score-value]").textContent = score === null ? "—" : String(score);
-  const executed = result.summary.passed + result.summary.failed;
-  document.querySelector("[data-score-summary]").textContent =
-    `${result.summary.passed} of ${executed} executable claims verified.`;
+  const scoreValue = document.querySelector("[data-score-value]");
+  scoreValue.textContent = score === null ? "N/A" : String(score);
+  scoreValue.toggleAttribute("data-score-state", score === null);
+  const reportTitle = result.summary.error
+    ? "The audit could not<br /> reach a verdict."
+    : result.summary.failed
+      ? "The record has<br /> a contradiction."
+      : result.summary.passed && !result.summary.unverifiable
+        ? "The docs held up<br /> under review."
+        : "Some promises need<br /> sharper wording.";
+  document.querySelector("[data-report-title]").innerHTML = reportTitle;
+  const executed = result.summary.passed + result.summary.failed + result.summary.error;
+  const qualifiers = [];
+  if (result.summary.error) qualifiers.push(`${result.summary.error} runner ${result.summary.error === 1 ? "error" : "errors"}`);
+  if (result.summary.unverifiable) qualifiers.push(`${result.summary.unverifiable} unverifiable`);
+  document.querySelector("[data-score-summary]").textContent = [
+    `${result.summary.passed} of ${executed} executed claims verified.`,
+    qualifiers.length ? `${qualifiers.join("; ")}.` : "",
+  ].filter(Boolean).join(" ");
   document.querySelector("[data-count-passed]").textContent = String(result.summary.passed).padStart(2, "0");
   document.querySelector("[data-count-failed]").textContent = String(result.summary.failed).padStart(2, "0");
   document.querySelector("[data-count-unverifiable]").textContent = String(result.summary.unverifiable).padStart(2, "0");
+  document.querySelector("[data-count-error]").textContent = String(result.summary.error).padStart(2, "0");
   document.querySelector("[data-claim-count-title]").textContent =
     `${result.summary.total} ${result.summary.total === 1 ? "promise" : "promises"}. ${result.summary.total} ${result.summary.total === 1 ? "receipt" : "receipts"}.`;
   for (const target of document.querySelectorAll("[data-repository-name]")) {
@@ -132,6 +187,9 @@ function renderLiveReport(result) {
   }
   for (const target of document.querySelectorAll("[data-target-url]")) target.textContent = result.targetUrl;
   document.querySelector("#evidence-grid").replaceChildren(...result.claims.map(createEvidenceCard));
+  const report = document.querySelector("#report");
+  report.dataset.state = "complete";
+  report.removeAttribute("aria-busy");
 }
 
 async function requestLiveAudit(payload, fetchImpl = fetch) {
@@ -170,7 +228,6 @@ async function runBrowserAudit(form) {
   setFieldError(repositoryInput, document.querySelector("#repo-error"), repository.ok ? undefined : repository.message);
   setFieldError(targetInput, document.querySelector("#target-error"), target.ok ? undefined : target.message);
   runError.hidden = true;
-  report.hidden = true;
   if (!repository.ok || !target.ok) {
     status.dataset.state = "error";
     status.textContent = "Correct the highlighted URL before starting the live audit.";
@@ -184,9 +241,18 @@ async function runBrowserAudit(form) {
   repositoryInput.disabled = true;
   targetInput.disabled = true;
   button.disabled = true;
-  button.textContent = "Running live Kane check…";
+  button.textContent = "Running documentation check…";
   status.dataset.state = "loading";
   status.textContent = "Cloning the documentation and running a real browser check. This can take one to two minutes.";
+  for (const target of document.querySelectorAll("[data-repository-name]")) target.textContent = repository.repository;
+  for (const output of document.querySelectorAll("[data-target-url]")) output.textContent = target.normalizedUrl;
+  showReportPlaceholder(
+    "loading",
+    "The docs are<br /> under review.",
+    "Audit in progress",
+    "Kane is checking one source-linked claim.",
+    "The truth score and exact browser evidence will appear here when the hosted run finishes.",
+  );
 
   try {
     const result = await requestLiveAudit({
@@ -196,7 +262,6 @@ async function runBrowserAudit(form) {
     renderLiveReport(result);
     status.dataset.state = "complete";
     status.textContent = "Live Kane check complete. The truth report and session evidence are ready.";
-    report.hidden = false;
     report.focus();
     const behavior = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     report.scrollIntoView({ block: "start", behavior });
@@ -205,6 +270,13 @@ async function runBrowserAudit(form) {
     runError.hidden = false;
     status.dataset.state = "error";
     status.textContent = "Live audit did not complete.";
+    showReportPlaceholder(
+      "error",
+      "The audit could not<br /> reach a verdict.",
+      "Audit unavailable",
+      "No truth report was generated.",
+      "Review the error above, then retry once the repository, target application, and hosted worker are available.",
+    );
   } finally {
     form.removeAttribute("aria-busy");
     repositoryInput.disabled = false;

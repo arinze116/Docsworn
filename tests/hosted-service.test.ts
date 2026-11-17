@@ -5,7 +5,7 @@ import type { HostedCheckResponse } from "../src/types.js";
 
 const liveResponse: HostedCheckResponse = {
   requestId: "request-1",
-  repository: "https://github.com/arinze116/Docsworn",
+  repository: "https://github.com/vercel/next-learn",
   targetUrl: "https://docsworn.vercel.app/",
   generatedAt: "2026-11-17T00:00:00.000Z",
   aiMode: "offline",
@@ -32,13 +32,16 @@ describe("hosted check service", () => {
       workerToken: "expected",
       runner: { run: async (_request, requestId) => ({ ...liveResponse, requestId }) },
       usageStore: { admit: async () => undefined },
-      validation: { resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }] },
+      validation: {
+        resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }],
+        repositoryIsPublic: async () => true,
+      },
     });
     const result = await service({
       token: "expected",
       clientIp: "203.0.113.8",
       body: {
-        repositoryUrl: "https://github.com/arinze116/Docsworn",
+        repositoryUrl: "https://github.com/vercel/next-learn",
         targetUrl: "https://docsworn.vercel.app",
       },
     });
@@ -53,14 +56,17 @@ describe("hosted check service", () => {
       workerToken: token,
       runner: { run: async () => { throw new Error(`provider echoed ${token}`); } },
       usageStore: { admit: async () => undefined },
-      validation: { resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }] },
+      validation: {
+        resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }],
+        repositoryIsPublic: async () => true,
+      },
       log: (message) => logs.push(message),
     });
     await service({
       token,
       clientIp: "203.0.113.8",
       body: {
-        repositoryUrl: "https://github.com/arinze116/Docsworn",
+        repositoryUrl: "https://github.com/vercel/next-learn",
         targetUrl: "https://docsworn.vercel.app",
       },
     });

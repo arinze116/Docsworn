@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { isWorkerAuthorized } from "../src/hosted/auth.js";
 import { SingleFlightGate } from "../src/hosted/single-flight.js";
-import { validateHostedCheckRequest } from "../src/hosted/validation.js";
+import { checkPublicGitHubRepository, validateHostedCheckRequest } from "../src/hosted/validation.js";
 
 describe("hosted audit security rules", () => {
   it("R-HOSTED-AUTH-1 rejects an invalid worker token", () => {
@@ -26,6 +26,39 @@ describe("hosted audit security rules", () => {
         ...(isAddressAllowed ? { isAddressAllowed } : {}),
       },
     )).rejects.toMatchObject({ code: "PRIVATE_TARGET", statusCode: 400 });
+  });
+
+  it("R-HOSTED-INPUT-1 rejects a GitHub repository that is not publicly accessible", async () => {
+    const repositoryIsPublic = process.env.FAULT_ASSUME_PRIVATE_REPOSITORY_PUBLIC === "1"
+      ? async () => true
+      : async () => false;
+    await expect(validateHostedCheckRequest(
+      {
+        repositoryUrl: "https://github.com/arinze116/Docsworn",
+        targetUrl: "https://docsworn.vercel.app",
+      },
+      {
+        resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }],
+        repositoryIsPublic,
+      },
+    )).rejects.toMatchObject({ code: "PRIVATE_REPOSITORY", statusCode: 400 });
+  });
+
+  it("R-TIMEOUT-1 bounds the public GitHub repository check", async () => {
+    const timeoutMs = process.env.FAULT_DISABLE_REPOSITORY_CHECK_TIMEOUT === "1" ? 1_000 : 20;
+    await expect(checkPublicGitHubRepository(
+      new URL("https://github.com/owner/repository"),
+      {
+        timeoutMs,
+        fetchImpl: async (_input, init) => await new Promise<Response>((resolve, reject) => {
+          const timer = setTimeout(() => resolve(new Response(null, { status: 200 })), 100);
+          init?.signal?.addEventListener("abort", () => {
+            clearTimeout(timer);
+            reject(new DOMException("Aborted", "AbortError"));
+          }, { once: true });
+        }),
+      },
+    )).rejects.toMatchObject({ code: "REPOSITORY_CHECK_TIMEOUT", statusCode: 503 });
   });
 
   it("R-HOSTED-BOUNDS-1 rejects a second concurrent audit", async () => {

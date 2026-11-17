@@ -6,6 +6,7 @@ import { sanitizeText } from "./sanitize.js";
 import type { DocClaim, GeneratedFlow, KaneObservation, ResultStatus } from "./types.js";
 
 type CommandExecutor = (request: CommandRequest) => ReturnType<typeof runCommand>;
+type KaneExecutionMode = "testmd" | "inline";
 
 interface KaneEvent {
   type?: string;
@@ -61,10 +62,26 @@ function sessionUrlFrom(events: KaneEvent[]): string | undefined {
   }
 }
 
+function buildKaneArguments(options: {
+  flow: GeneratedFlow;
+  executionMode: KaneExecutionMode;
+  startUrl?: string;
+  timeoutSeconds: number;
+}): string[] {
+  const common = ["--agent", "--headless", "--timeout", String(options.timeoutSeconds)];
+  if (options.executionMode === "inline") {
+    if (!options.startUrl) throw new InputError("Inline Kane execution requires a start URL");
+    return ["run", options.flow.objective, "--url", options.startUrl, ...common];
+  }
+  return ["testmd", "run", options.flow.path, ...common, "--on-lock-conflict", "wait"];
+}
+
 export async function runKaneFlows(options: {
   flows: GeneratedFlow[];
   kaneBinary: string;
   timeoutMs: number;
+  executionMode?: KaneExecutionMode;
+  startUrl?: string;
   execute?: CommandExecutor;
 }): Promise<KaneObservation[]> {
   const execute = options.execute ?? runCommand;
@@ -73,7 +90,12 @@ export async function runKaneFlows(options: {
     const startedAt = performance.now();
     try {
       const kaneTimeoutSeconds = Math.max(1, Math.floor(options.timeoutMs / 1_000) - 5);
-      const args = ["testmd", "run", flow.path, "--agent", "--headless", "--timeout", String(kaneTimeoutSeconds), "--on-lock-conflict", "wait"];
+      const args = buildKaneArguments({
+        flow,
+        executionMode: options.executionMode ?? "testmd",
+        ...(options.startUrl ? { startUrl: options.startUrl } : {}),
+        timeoutSeconds: kaneTimeoutSeconds,
+      });
       const result = await execute({
         command: options.kaneBinary,
         args,

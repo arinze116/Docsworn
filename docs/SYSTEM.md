@@ -17,7 +17,7 @@
 | Gemini timeout | 15 s | TARGET | fallback must remain responsive |
 | Hosted audit users per day | <= 8 | TARGET | Kane credit and abuse budget |
 | Hosted audit request body | <= 8 KB | TARGET | repository URL + target URL only |
-| Hosted audit claims per request | <= 3 | TARGET | Vercel/Kane runtime and credit bound |
+| Hosted audit claims per request | 1 | TARGET | public edge duration and Kane credit bound |
 | Hosted audit concurrency | 1 | TARGET | browser/auth lock and cost bound |
 | Hosted audit duration | <= 280 s | TARGET | below Vercel's 300 s function ceiling |
 | Hosted audit average arrival rate | 0.000093 req/s | TARGET | 8 requests / 86,400 seconds |
@@ -38,17 +38,18 @@
 - R-FALLBACK-1: Gemini failure falls back to deterministic extraction/fix logic in auto mode.
 - R-KANE-FORMAT-1: generated `_test.md` files use only documented Kane frontmatter keys and keep source traceability in ordinary Markdown.
 - R-HOSTED-AUTH-1: only the Vercel proxy can invoke the VPS worker; the shared secret is timing-safe compared, never returned and never logged.
-- R-HOSTED-INPUT-1: hosted audits accept only canonical public GitHub repository URLs and public HTTPS target URLs with no credentials, fragments or non-standard ports.
+- R-HOSTED-INPUT-1: hosted audits accept only canonical GitHub repositories confirmed reachable without credentials and public HTTPS target URLs with no credentials, fragments or non-standard ports.
 - R-HOSTED-ISOLATION-1: every hosted audit runs in a disposable, read-only Docker container on a restricted bridge network; repository code is never executed.
 - R-HOSTED-BOUNDS-1: request bytes, claims, per-IP frequency, daily jobs, concurrency, subprocess time and response bytes are bounded before Kane runs.
 - R-HOSTED-TRUTH-1: hosted results are returned only from `live-kane` observations; each executed claim retains its exact observation, source line, suggested correction and validated LambdaTest session URL.
+- R-HOSTED-DURATION-1: hosted checks use Kane's direct `run` surface while the local CLI keeps authored `testmd` execution; the hosted path must complete within the public edge deadline.
 - R-BROWSER-DEMO-1: the Vercel root exposes labelled repository and live-target URL fields, calls `/api/check`, announces live progress/failures, and renders only the returned live result.
 
 ## Architecture
 
 A modular local Node CLI reads one repository, extracts traceable claims, writes Kane Markdown tests, runs them sequentially, and writes a report. GitHub cloning uses a scoped temporary directory. Gemini is optional.
 
-The hosted path is deliberately split. Vercel serves the interface and a same-origin `/api/check` function. That function validates and bounds the request, adds the authenticated worker header and proxies it over TLS. The VPS worker applies global and per-IP admission limits, then starts one disposable Docker audit container. The container receives only the two public URLs, a bounded workspace and the existing Kane profile mount; it clones the repository, runs Docsworn with Kane, returns structured JSON and is removed. The worker retains only rolling usage counters. No repository or report is persisted by the service.
+The hosted path is deliberately split. Vercel serves the interface and a same-origin `/api/check` function. That function validates and bounds the request, adds the authenticated worker header and proxies it over TLS. Before admission, the VPS worker uses a bounded unauthenticated `HEAD` request to confirm that GitHub exposes the submitted repository publicly, then applies global and per-IP limits and starts one disposable Docker audit container. The container receives only the two public URLs, a bounded workspace and the existing Kane profile mount; it clones the repository, runs Docsworn with Kane, returns structured JSON and is removed. The worker retains only rolling usage counters. No repository or report is persisted by the service.
 
 ## Known limits
 
@@ -58,3 +59,4 @@ The hosted path is deliberately split. Vercel serves the interface and a same-or
 - An unverifiable claim has no Kane session because it has no executable pass condition; the UI states that instead of linking unrelated evidence.
 - Docker network rules reduce access to host/private networks. They are not a substitute for a separately owned multi-tenant sandbox; raise the isolation boundary before increasing traffic or claim limits.
 - Kane/LambdaTest availability and remaining credits are external dependencies. The UI reports those failures without falling back to fixture evidence.
+- The hosted browser surface accepts only publicly cloneable GitHub repositories. Private repositories remain a local CLI workflow unless an explicit private-repository authorization design is added.

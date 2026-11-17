@@ -18,11 +18,11 @@
 
 ### Kane runner
 - **Owns:** invocation, NDJSON parsing, exit-code mapping and observation summaries.
-- **Promises:** one flow per process, no shell, 0=passed, 1=failed, 2/3=error, timeout distinct.
+- **Promises:** one flow per process, no shell, 0=passed, 1=failed, 2/3=error, timeout distinct; local audits use authored `testmd`, while hosted audits use direct `run` objectives to remain inside the public edge deadline.
 - **Depends on:** installed/authenticated Kane CLI and browser.
 - **Fails how:** missing binary, timeout or infrastructure exit becomes an error observation; later claims still run.
 - **Hard part:** keeping documentation falsity separate from runner failure.
-- **Red tests:** `R-TIMEOUT-1 terminates a hung command`; `R-TIMEOUT-1 records a timed-out flow and continues the audit`; runner mapping unit tests.
+- **Red tests:** `R-TIMEOUT-1 terminates a hung command`; `R-TIMEOUT-1 records a timed-out flow and continues the audit`; `R-HOSTED-DURATION-1 uses Kane's direct run surface for hosted objectives`; runner mapping unit tests.
 
 ### Flow generator
 - **Owns:** one Kane `_test.md` file per testable claim and source-to-flow traceability.
@@ -44,9 +44,9 @@
 - **Owns:** repository/live-target inputs, client validation, progress/error announcements and dynamic live-result cards.
 - **Promises:** calls only same-origin `/api/check`; never receives credentials; renders claim, exact observation, correction, source line and a validated Kane session reference for every result (R-BROWSER-DEMO-1, R-HOSTED-TRUTH-1).
 - **Depends on:** committed HTML/CSS/ES-module JavaScript and the Vercel proxy.
-- **Fails how:** invalid input focuses the first field; busy/rate/provider errors remain visible and never reveal stale fixture results.
+- **Fails how:** invalid input focuses the first field; busy/rate/provider errors remain visible in both the form and report state and never reveal stale fixture results.
 - **Hard part:** making a multi-minute real audit understandable without inventing progress or evidence.
-- **Red tests:** browser contract and DOM rendering tests; endpoint failure must leave the report hidden.
+- **Red tests:** browser contract and DOM rendering tests; empty, loading, result and endpoint-failure states remain honest and navigable.
 
 ### Vercel check proxy
 - **Owns:** public HTTP method/body boundary, client-IP derivation, worker authentication header, upstream timeout and safe response mapping.
@@ -58,8 +58,8 @@
 
 ### hosted Kane worker
 - **Owns:** authenticated admission, public URL resolution, per-IP/daily limits, single-flight execution, container lifecycle and structured result validation.
-- **Promises:** only one bounded disposable audit container runs; repository files and results are deleted with the container; session URLs must be LambdaTest HTTPS URLs (R-HOSTED-INPUT-1, R-HOSTED-ISOLATION-1, R-HOSTED-BOUNDS-1, R-HOSTED-TRUTH-1).
+- **Promises:** repository visibility is checked without credentials and within a five-second deadline before admission; only one bounded disposable audit container runs; repository files and results are deleted with the container; session URLs must be LambdaTest HTTPS URLs (R-TIMEOUT-1, R-HOSTED-INPUT-1, R-HOSTED-ISOLATION-1, R-HOSTED-BOUNDS-1, R-HOSTED-TRUTH-1).
 - **Depends on:** Docker, GitHub, the target app, Kane/LambdaTest, the mounted Kane profile and a restricted Docker network.
 - **Fails how:** unauthorized=401, invalid=400, rate/daily=429, busy=503, job timeout/provider/container failure=502/504; all are sanitized.
 - **Hard part:** exposing useful live execution without turning Kane credits or the VPS browser into an unbounded public resource.
-- **Red tests:** bad auth, private target, oversized body, full worker, rate limit, daily cap, container timeout, secret-log canary and invalid session URL.
+- **Red tests:** bad auth, private target, private repository, repository-check timeout, oversized body, full worker, rate limit, daily cap, container timeout, secret-log canary and invalid session URL.

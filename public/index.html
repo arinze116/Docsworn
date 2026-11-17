@@ -53,33 +53,58 @@
 
           <div class="audit-panel" id="audit">
             <form id="audit-form" novalidate>
-              <label for="repo-url" class="repository-label">GitHub repository URL</label>
-              <div class="repository-control">
-                <input
-                  id="repo-url"
-                  name="repository"
-                  type="url"
-                  inputmode="url"
-                  autocomplete="url"
-                  spellcheck="false"
-                  placeholder="https://github.com/owner/repository"
-                  aria-describedby="repo-help repo-error"
-                  required
-                />
-                <button id="run-button" type="submit" data-idle-label="Run documentation check">
-                  Run documentation check <span aria-hidden="true">↗</span>
-                </button>
+              <div class="audit-fields">
+                <div class="field-group">
+                  <label for="repo-url" class="repository-label">GitHub repository URL</label>
+                  <div class="repository-control">
+                    <input
+                      id="repo-url"
+                      name="repository"
+                      type="url"
+                      inputmode="url"
+                      autocomplete="url"
+                      spellcheck="false"
+                      placeholder="https://github.com/owner/repository"
+                      aria-describedby="repo-help repo-error"
+                      required
+                    />
+                  </div>
+                  <div class="form-meta">
+                    <p class="field-help" id="repo-help">Public GitHub repository containing the documentation.</p>
+                    <p class="field-error" id="repo-error" hidden></p>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="target-url" class="repository-label">Live application URL</label>
+                  <div class="repository-control">
+                    <input
+                      id="target-url"
+                      name="target"
+                      type="url"
+                      inputmode="url"
+                      autocomplete="url"
+                      spellcheck="false"
+                      placeholder="https://your-live-app.example"
+                      aria-describedby="target-help target-error"
+                      required
+                    />
+                  </div>
+                  <div class="form-meta">
+                    <p class="field-help" id="target-help">Public HTTPS app that Kane should observe.</p>
+                    <p class="field-error" id="target-error" hidden></p>
+                  </div>
+                </div>
               </div>
-              <div class="form-meta">
-                <p class="field-help" id="repo-help">Public HTTPS GitHub owner/repository URL only.</p>
-                <p class="field-error" id="repo-error" hidden></p>
-              </div>
+              <button class="audit-action" id="run-button" type="submit" data-idle-label="Run live Kane check">
+                Run live Kane check <span aria-hidden="true">↗</span>
+              </button>
               <p class="run-status" id="run-status" role="status" aria-live="polite" aria-atomic="true"></p>
+              <p class="run-error" id="run-error" role="alert" hidden></p>
             </form>
             <p class="demo-disclosure">
-              <span aria-hidden="true">◎</span> Hosted demo uses captured fixture evidence. It does not clone or inspect the URL you enter.
+              <span aria-hidden="true">◎</span> Live hosted audit · isolated temporary clone · one focused claim · workspace deleted after the run.
             </p>
-            <noscript><p class="field-error noscript">JavaScript is required for the browser demo. The local CLI remains fully available.</p></noscript>
+            <noscript><p class="field-error noscript">JavaScript is required for the hosted audit. The local CLI remains fully available.</p></noscript>
           </div>
         </div>
 
@@ -98,97 +123,34 @@
             <p class="section-label"><span aria-hidden="true"></span> Documentation Truth Report</p>
             <h2 id="report-title">The product changed.<br />The docs did not.</h2>
             <p>
-              Submitted repository: <strong data-repository-name>owner/repository</strong>. This browser result uses captured
-              fixture evidence; it is not a claim about that repository’s current contents.
+              Live audit of <strong data-repository-name>owner/repository</strong> against
+              <strong data-target-url>the submitted application</strong>.
             </p>
           </header>
 
           <div class="truth-board">
             <div class="truth-score" aria-label="Documentation truth score">
-              <span class="score-value">25</span>
+              <span class="score-value" data-score-value>—</span>
               <span class="score-unit">/100<br />truth score</span>
             </div>
-            <p class="score-summary">1 of 4 executable claims verified.</p>
+            <p class="score-summary" data-score-summary>Waiting for live evidence.</p>
             <dl class="score-counts">
-              <div><dt>Passed</dt><dd>01</dd></div>
-              <div><dt>Failed</dt><dd>03</dd></div>
-              <div><dt>Unverifiable</dt><dd>01</dd></div>
+              <div><dt>Passed</dt><dd data-count-passed>00</dd></div>
+              <div><dt>Failed</dt><dd data-count-failed>00</dd></div>
+              <div><dt>Unverifiable</dt><dd data-count-unverifiable>00</dd></div>
             </dl>
-            <p class="evidence-stamp"><span aria-hidden="true"></span> Captured deterministic Kane evidence</p>
+            <p class="evidence-stamp"><span aria-hidden="true"></span> Live Kane evidence</p>
           </div>
 
           <div class="evidence-intro">
             <div>
-              <p class="section-label"><span aria-hidden="true"></span> Selected evidence · README.md</p>
-              <h2>Five promises.<br />Five receipts.</h2>
+              <p class="section-label"><span aria-hidden="true"></span> Source-linked evidence</p>
+              <h2 data-claim-count-title>Promises in.<br />Receipts out.</h2>
             </div>
-            <p>Every verdict stays attached to the source sentence, the observed product behavior and a corrected wording when the record drifted.</p>
+            <p>Every verdict stays attached to the claim, source line, exact Kane observation, corrected wording and its LambdaTest session.</p>
           </div>
 
-          <div class="evidence-grid">
-            <article class="evidence-card evidence-featured claim-failed" aria-labelledby="claim-001-title">
-              <header class="evidence-card-header">
-                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
-                <code>README.md:7</code>
-              </header>
-              <h3 id="claim-001-title">The button label drifted.</h3>
-              <div class="evidence-comparison">
-                <div><span>Docs say</span><blockquote>Open /register and click “Submit” to create a new account.</blockquote></div>
-                <div><span>Kane observed</span><p>Expected “Submit”; actual “Create account”. The documented button was not present.</p></div>
-              </div>
-              <p class="suggestion"><strong>Correct the record</strong> Open /register and click “Create account” to create a new account.</p>
-            </article>
-
-            <article class="evidence-card claim-failed" aria-labelledby="claim-002-title">
-              <header class="evidence-card-header">
-                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
-                <code>README.md:8</code>
-              </header>
-              <h3 id="claim-002-title">The success message changed.</h3>
-              <div class="evidence-comparison">
-                <div><span>Docs say</span><blockquote>After registration, the page displays “Welcome aboard”.</blockquote></div>
-                <div><span>Kane observed</span><p>Expected “Welcome aboard”; actual “Account queued for review.”</p></div>
-              </div>
-              <p class="suggestion"><strong>Correct the record</strong> After registration, the page displays “Account queued for review.”</p>
-            </article>
-
-            <article class="evidence-card claim-passed" aria-labelledby="claim-003-title">
-              <header class="evidence-card-header">
-                <p class="claim-status"><span aria-hidden="true">✓</span> Passed</p>
-                <code>README.md:9</code>
-              </header>
-              <h3 id="claim-003-title">Native email validation still holds.</h3>
-              <div class="evidence-comparison">
-                <div><span>Docs say</span><blockquote>The email field rejects addresses without an @ symbol.</blockquote></div>
-                <div><span>Kane observed</span><p>The browser blocked submission for an email without an @ symbol.</p></div>
-              </div>
-            </article>
-
-            <article class="evidence-card claim-failed" aria-labelledby="claim-004-title">
-              <header class="evidence-card-header">
-                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
-                <code>README.md:10</code>
-              </header>
-              <h3 id="claim-004-title">Registration no longer redirects.</h3>
-              <div class="evidence-comparison">
-                <div><span>Docs say</span><blockquote>Registration automatically signs the user in and opens /dashboard.</blockquote></div>
-                <div><span>Kane observed</span><p>Expected “/dashboard”; actual “/register”. The user remained on the registration page.</p></div>
-              </div>
-              <p class="suggestion"><strong>Correct the record</strong> After registration, the user remains on /register.</p>
-            </article>
-
-            <article class="evidence-card claim-warning" aria-labelledby="claim-005-title">
-              <header class="evidence-card-header">
-                <p class="claim-status"><span aria-hidden="true">!</span> Unverifiable</p>
-                <code>README.md:11</code>
-              </header>
-              <h3 id="claim-005-title">“Fast and easy” has no pass condition.</h3>
-              <div class="evidence-comparison">
-                <div><span>Docs say</span><blockquote>Registration will always be fast and easy.</blockquote></div>
-                <div><span>Docsworn classified</span><p>Subjective wording has no observable pass condition.</p></div>
-              </div>
-            </article>
-          </div>
+          <div class="evidence-grid" id="evidence-grid"></div>
         </div>
       </section>
 
@@ -216,11 +178,10 @@
       <section class="quickstart" id="quickstart" aria-labelledby="quickstart-title">
         <div class="quickstart-shell">
           <div class="quickstart-copy">
-            <p class="section-label"><span aria-hidden="true"></span> Local-first by design</p>
+            <p class="section-label"><span aria-hidden="true"></span> Local and hosted</p>
             <h2 id="quickstart-title">Run the proof where the code lives.</h2>
             <p>
-              Real repository and Kane execution remain in the local CLI. That is where Docsworn clones public repositories,
-              generates traceable tests, reads Kane exit codes and writes the report.
+              The hosted path runs the same pipeline in a disposable bounded container. The local CLI remains the unrestricted path for private repositories, more claims and repeatable CI audits.
             </p>
             <a href="#limits">Read the exact deployment status <span aria-hidden="true">↗</span></a>
           </div>
@@ -242,9 +203,9 @@ Report: doctruth-report.md</code></pre>
             <h2 id="limits-title">The boundary is part of the evidence.</h2>
           </div>
           <div class="limits-grid">
-            <p><span>It is</span> an accessible browser demonstration of the repository-to-report workflow.</p>
-            <p><span>It uses</span> captured deterministic Kane evidence so the public demo stays stable and credential-free.</p>
-            <p><span>It is not</span> a hosted Kane runner or proof that the submitted repository was inspected.</p>
+            <p><span>It is</span> a live hosted Docsworn audit using real Kane browser execution.</p>
+            <p><span>It uses</span> a temporary isolated clone, one concurrent job and one focused claim per hosted run.</p>
+            <p><span>It is not</span> persistent storage, a private-repository uploader or an automatic documentation editor.</p>
           </div>
         </div>
       </section>

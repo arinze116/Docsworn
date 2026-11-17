@@ -1,0 +1,26 @@
+server {
+    listen 127.0.0.1:8788;
+    server_name _;
+
+    client_max_body_size 8k;
+
+    location = /health {
+        proxy_pass http://unix:/run/docsworn-worker/api.sock:/health;
+        proxy_set_header Host $host;
+        proxy_read_timeout 5s;
+    }
+
+    location = /v1/check {
+        proxy_pass http://unix:/run/docsworn-worker/api.sock:/v1/check;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 290s;
+        proxy_send_timeout 15s;
+    }
+
+    location / {
+        return 404;
+    }
+}

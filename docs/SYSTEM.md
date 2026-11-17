@@ -15,11 +15,19 @@
 | Kane concurrency | 1 | TARGET | avoid browser/auth lock conflicts |
 | Kane timeout per claim | 300 s | TARGET | configurable CLI default |
 | Gemini timeout | 15 s | TARGET | fallback must remain responsive |
-| Persistent server data | 0 bytes | MEASURED-by-design | local CLI only |
-| Public static pages | 1 | TARGET | Vercel browser demo |
-| Public dynamic/API requests | 0 | MEASURED-by-design | client-only captured-evidence demo |
-| Public HTML + CSS + JS | < 45 KB | TARGET | fast judge-facing load |
-| RPO / RTO | not applicable | MEASURED-by-design | no service/database |
+| Hosted audit users per day | <= 8 | TARGET | Kane credit and abuse budget |
+| Hosted audit request body | <= 8 KB | TARGET | repository URL + target URL only |
+| Hosted audit claims per request | <= 3 | TARGET | Vercel/Kane runtime and credit bound |
+| Hosted audit concurrency | 1 | TARGET | browser/auth lock and cost bound |
+| Hosted audit duration | <= 280 s | TARGET | below Vercel's 300 s function ceiling |
+| Hosted audit average arrival rate | 0.000093 req/s | TARGET | 8 requests / 86,400 seconds |
+| Hosted audit expected service time | 180 s | GUESS | validate from production runs |
+| Hosted audit requests in flight | 0.017 | GUESS | Little's law: 0.000093 x 180 |
+| Persistent server data | < 32 KB | TARGET | rolling rate/daily usage counters only |
+| Public static pages | 1 | TARGET | Vercel browser application |
+| Public dynamic/API routes | 1 | TARGET | Vercel `/api/check` proxy |
+| Public HTML + CSS + JS | < 55 KB | TARGET | fast judge-facing load |
+| Hosted usage RPO / RTO | 24 h / 15 min | TARGET | losing counters may admit extra work, never lose audit truth |
 
 ## Rules
 
@@ -29,15 +37,24 @@
 - R-BOUNDS-1: document count and bytes are bounded before model or flow generation.
 - R-FALLBACK-1: Gemini failure falls back to deterministic extraction/fix logic in auto mode.
 - R-KANE-FORMAT-1: generated `_test.md` files use only documented Kane frontmatter keys and keep source traceability in ordinary Markdown.
-- R-BROWSER-DEMO-1: the Vercel root exposes a labelled GitHub repository URL form, validates the input locally, and renders a pass/fail/unverifiable truth report from visibly labelled captured evidence without secrets or runtime API calls.
+- R-HOSTED-AUTH-1: only the Vercel proxy can invoke the VPS worker; the shared secret is timing-safe compared, never returned and never logged.
+- R-HOSTED-INPUT-1: hosted audits accept only canonical public GitHub repository URLs and public HTTPS target URLs with no credentials, fragments or non-standard ports.
+- R-HOSTED-ISOLATION-1: every hosted audit runs in a disposable, read-only Docker container on a restricted bridge network; repository code is never executed.
+- R-HOSTED-BOUNDS-1: request bytes, claims, per-IP frequency, daily jobs, concurrency, subprocess time and response bytes are bounded before Kane runs.
+- R-HOSTED-TRUTH-1: hosted results are returned only from `live-kane` observations; each executed claim retains its exact observation, source line, suggested correction and validated LambdaTest session URL.
+- R-BROWSER-DEMO-1: the Vercel root exposes labelled repository and live-target URL fields, calls `/api/check`, announces live progress/failures, and renders only the returned live result.
 
 ## Architecture
 
-A modular local Node CLI reads one repository, extracts traceable claims, writes Kane Markdown tests, runs them sequentially, and writes a report. GitHub cloning uses a scoped temporary directory. Gemini is optional. A separate Vercel deployment serves an interactive static HTML/CSS/JavaScript demo: it accepts and validates a public GitHub repository URL, shows a bounded loading state, then renders the committed deterministic report. It cannot run Kane, clone repositories or receive credentials. There is no database, queue, cache, dynamic public endpoint or background worker.
+A modular local Node CLI reads one repository, extracts traceable claims, writes Kane Markdown tests, runs them sequentially, and writes a report. GitHub cloning uses a scoped temporary directory. Gemini is optional.
+
+The hosted path is deliberately split. Vercel serves the interface and a same-origin `/api/check` function. That function validates and bounds the request, adds the authenticated worker header and proxies it over TLS. The VPS worker applies global and per-IP admission limits, then starts one disposable Docker audit container. The container receives only the two public URLs, a bounded workspace and the existing Kane profile mount; it clones the repository, runs Docsworn with Kane, returns structured JSON and is removed. The worker retains only rolling usage counters. No repository or report is persisted by the service.
 
 ## Known limits
 
 - Heuristic extraction favors explicit English behavioral sentences.
 - A failed Kane flow can mean stale docs, a flaky target or a bad generated objective; the report preserves the observation rather than claiming causality.
-- Captured results are a labelled fallback and do not count as current live execution.
-- The hosted form demonstrates the browser workflow but does not inspect the submitted repository; arbitrary live audits continue to run through the local CLI.
+- Hosted capacity is intentionally one audit at a time and eight accepted jobs per UTC day; excess requests receive a retryable error.
+- An unverifiable claim has no Kane session because it has no executable pass condition; the UI states that instead of linking unrelated evidence.
+- Docker network rules reduce access to host/private networks. They are not a substitute for a separately owned multi-tenant sandbox; raise the isolation boundary before increasing traffic or claim limits.
+- Kane/LambdaTest availability and remaining credits are external dependencies. The UI reports those failures without falling back to fixture evidence.

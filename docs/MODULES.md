@@ -41,9 +41,25 @@
 - **Red tests:** report acceptance snapshots and deterministic replacement tests.
 
 ### browser evidence demo
-- **Owns:** repository URL input, client-side validation, loading/status announcements, deterministic report rendering, quick start and deployment disclosure.
-- **Promises:** accepts only HTTPS `github.com/<owner>/<repo>` URLs; makes no runtime API calls; never receives credentials; captured evidence remains visibly labelled (R-BROWSER-DEMO-1).
-- **Depends on:** committed HTML/CSS/ES-module JavaScript and Vercel static hosting.
-- **Fails how:** invalid input is described beside the control without clearing it; an unavailable host removes the optional browser presentation but does not affect the CLI or report generation.
-- **Hard part:** exposing the complete interaction Kane expects without pretending the submitted repository was cloned or executed on Vercel.
-- **Red tests:** `R-BROWSER-DEMO-1 Vercel browser demo` checks semantics, URL parsing, invalid/loading/success hooks, candid disclosure, secret absence and payload budget.
+- **Owns:** repository/live-target inputs, client validation, progress/error announcements and dynamic live-result cards.
+- **Promises:** calls only same-origin `/api/check`; never receives credentials; renders claim, exact observation, correction, source line and a validated Kane session reference for every result (R-BROWSER-DEMO-1, R-HOSTED-TRUTH-1).
+- **Depends on:** committed HTML/CSS/ES-module JavaScript and the Vercel proxy.
+- **Fails how:** invalid input focuses the first field; busy/rate/provider errors remain visible and never reveal stale fixture results.
+- **Hard part:** making a multi-minute real audit understandable without inventing progress or evidence.
+- **Red tests:** browser contract and DOM rendering tests; endpoint failure must leave the report hidden.
+
+### Vercel check proxy
+- **Owns:** public HTTP method/body boundary, client-IP derivation, worker authentication header, upstream timeout and safe response mapping.
+- **Promises:** no secret in client JavaScript, responses or logs; 8 KB request limit; no-store responses; only configured HTTPS worker origin (R-HOSTED-AUTH-1, R-HOSTED-BOUNDS-1).
+- **Depends on:** Vercel Node runtime and the authenticated HTTPS worker edge.
+- **Fails how:** malformed/large requests return 400/413; missing configuration or upstream failures return a bounded 503/504 JSON error.
+- **Hard part:** holding one request open without allowing an unbounded serverless execution.
+- **Red tests:** invalid worker token is never client-visible; hanging upstream aborts at the configured deadline.
+
+### hosted Kane worker
+- **Owns:** authenticated admission, public URL resolution, per-IP/daily limits, single-flight execution, container lifecycle and structured result validation.
+- **Promises:** only one bounded disposable audit container runs; repository files and results are deleted with the container; session URLs must be LambdaTest HTTPS URLs (R-HOSTED-INPUT-1, R-HOSTED-ISOLATION-1, R-HOSTED-BOUNDS-1, R-HOSTED-TRUTH-1).
+- **Depends on:** Docker, GitHub, the target app, Kane/LambdaTest, the mounted Kane profile and a restricted Docker network.
+- **Fails how:** unauthorized=401, invalid=400, rate/daily=429, busy=503, job timeout/provider/container failure=502/504; all are sanitized.
+- **Hard part:** exposing useful live execution without turning Kane credits or the VPS browser into an unbounded public resource.
+- **Red tests:** bad auth, private target, oversized body, full worker, rate limit, daily cap, container timeout, secret-log canary and invalid session URL.

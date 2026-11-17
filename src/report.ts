@@ -51,6 +51,7 @@ export function renderReport(output: AuditOutput): string {
       `- Kane flow: ${audited.flowPath ? `\`${audited.flowPath}\`` : "not generated"}`,
       `- Observation: ${observation.summary}`,
     );
+    if (observation.sessionUrl) lines.push(`- Kane session: ${observation.sessionUrl}`);
     if (audited.suggestedFix) lines.push(`- Suggested documentation: **${audited.suggestedFix}**`);
     if (claim.reason) lines.push(`- Verifiability note: ${claim.reason}`);
     lines.push("");

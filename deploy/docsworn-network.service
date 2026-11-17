@@ -1,0 +1,12 @@
+[Unit]
+Description=Docsworn isolated audit network
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/ubuntu/Docsworn/deploy/ensure-docsworn-network.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

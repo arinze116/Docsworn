@@ -72,7 +72,11 @@ export async function auditDocumentation(options: AuditOptions): Promise<AuditOu
     } else if (options.skipRun) {
       observations = claims.map((claim) => pendingObservation(claim.id));
     } else {
-      observations = await runKaneFlows({ flows, kaneBinary: options.kaneBinary, timeoutMs: options.kaneTimeoutMs });
+      observations = await runKaneFlows({
+        flows,
+        kaneBinary: options.kaneBinary,
+        timeoutMs: options.kaneTimeoutMs,
+      });
     }
 
     const flowByClaim = new Map(flows.map((flow) => [flow.claim.id, flow]));

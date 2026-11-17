@@ -6,6 +6,7 @@ import type { HostedCheckRequest } from "../types.js";
 import { HostedRequestError } from "./errors.js";
 
 const MAX_URL_LENGTH = 2_048;
+const DEFAULT_REPOSITORY_CHECK_TIMEOUT_MS = 5_000;
 
 export interface AddressRecord {
   address: string;
@@ -15,6 +16,12 @@ export interface AddressRecord {
 export interface HostedValidationOptions {
   resolveHostname?: (hostname: string) => Promise<AddressRecord[]>;
   isAddressAllowed?: (address: string) => boolean;
+  repositoryIsPublic?: (repositoryUrl: URL) => Promise<boolean>;
+}
+
+export interface GitHubRepositoryCheckOptions {
+  timeoutMs?: number;
+  fetchImpl?: typeof fetch;
 }
 
 function isPrivateIpv4(address: string): boolean {
@@ -42,6 +49,39 @@ export function isPublicAddress(address: string): boolean {
   if (family === 4) return !isPrivateIpv4(address);
   if (family === 6) return !isPrivateIpv6(address);
   return false;
+}
+
+/** Confirms that an unauthenticated visitor can reach a GitHub repository within a bounded deadline. */
+export async function checkPublicGitHubRepository(
+  repositoryUrl: URL,
+  options: GitHubRepositoryCheckOptions = {},
+): Promise<boolean> {
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    options.timeoutMs ?? DEFAULT_REPOSITORY_CHECK_TIMEOUT_MS,
+  );
+  try {
+    const response = await (options.fetchImpl ?? fetch)(repositoryUrl, {
+      method: "HEAD",
+      redirect: "manual",
+      signal: controller.signal,
+      headers: { "User-Agent": "Docsworn/0.1 public-repository-check" },
+    });
+    if (response.status === 404) return false;
+    if (response.status >= 200 && response.status < 400) return true;
+    throw new HostedRequestError("GitHub repository availability could not be confirmed", 503, "REPOSITORY_CHECK_UNAVAILABLE");
+  } catch (error) {
+    if (error instanceof HostedRequestError) throw error;
+    const didTimeOut = error instanceof Error && error.name === "AbortError";
+    throw new HostedRequestError(
+      didTimeOut ? "GitHub repository check timed out" : "GitHub repository availability could not be confirmed",
+      503,
+      didTimeOut ? "REPOSITORY_CHECK_TIMEOUT" : "REPOSITORY_CHECK_UNAVAILABLE",
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function parseTargetUrl(input: string): URL {
@@ -91,5 +131,13 @@ export async function validateHostedCheckRequest(
   }
   const targetUrl = parseTargetUrl(body.targetUrl.trim());
   await resolvePublicTarget(targetUrl, options);
+  const repositoryIsPublic = options.repositoryIsPublic ?? checkPublicGitHubRepository;
+  if (!await repositoryIsPublic(repositoryUrl)) {
+    throw new HostedRequestError(
+      "GitHub repository must exist and be publicly accessible",
+      400,
+      "PRIVATE_REPOSITORY",
+    );
+  }
   return { repositoryUrl: repositoryUrl.toString(), targetUrl: targetUrl.toString() };
 }

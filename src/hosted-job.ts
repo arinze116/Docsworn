@@ -28,6 +28,7 @@ async function main(): Promise<void> {
     flowsDirectory: path.join("/tmp", "flows"),
     kaneBinary: "kane-cli",
     kaneTimeoutMs: boundedInteger("DOCSWORN_KANE_TIMEOUT_MS", 70_000, 10_000, 120_000),
+    kaneExecutionMode: "inline",
     skipRun: false,
     aiMode: "off",
     maxClaims: boundedInteger("DOCSWORN_MAX_CLAIMS", 3, 1, 3),

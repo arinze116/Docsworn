@@ -95,8 +95,8 @@
                   </div>
                 </div>
               </div>
-              <button class="audit-action" id="run-button" type="submit" data-idle-label="Run live Kane check">
-                Run live Kane check <span aria-hidden="true">↗</span>
+              <button class="audit-action" id="run-button" type="submit" data-idle-label="Run documentation check">
+                Run documentation check <span aria-hidden="true">↗</span>
               </button>
               <p class="run-status" id="run-status" role="status" aria-live="polite" aria-atomic="true"></p>
               <p class="run-error" id="run-error" role="alert" hidden></p>
@@ -117,11 +117,11 @@
         </ol>
       </section>
 
-      <section class="report" id="report" aria-labelledby="report-title" tabindex="-1" hidden>
+      <section class="report" id="report" aria-labelledby="report-title" tabindex="-1" data-state="empty">
         <div class="report-shell">
           <header class="report-heading">
             <p class="section-label"><span aria-hidden="true"></span> Documentation Truth Report</p>
-            <h2 id="report-title">The product changed.<br />The docs did not.</h2>
+            <h2 id="report-title" data-report-title>No verdict yet.<br /> The record is open.</h2>
             <p>
               Live audit of <strong data-repository-name>owner/repository</strong> against
               <strong data-target-url>the submitted application</strong>.
@@ -130,14 +130,15 @@
 
           <div class="truth-board">
             <div class="truth-score" aria-label="Documentation truth score">
-              <span class="score-value" data-score-value>—</span>
-              <span class="score-unit">/100<br />truth score</span>
+              <span class="score-value" data-score-value data-score-state="empty">N/A</span>
+              <span class="score-unit">/100<br /> truth score</span>
             </div>
             <p class="score-summary" data-score-summary>Waiting for live evidence.</p>
             <dl class="score-counts">
               <div><dt>Passed</dt><dd data-count-passed>00</dd></div>
               <div><dt>Failed</dt><dd data-count-failed>00</dd></div>
               <div><dt>Unverifiable</dt><dd data-count-unverifiable>00</dd></div>
+              <div><dt>Runner errors</dt><dd data-count-error>00</dd></div>
             </dl>
             <p class="evidence-stamp"><span aria-hidden="true"></span> Live Kane evidence</p>
           </div>
@@ -145,12 +146,18 @@
           <div class="evidence-intro">
             <div>
               <p class="section-label"><span aria-hidden="true"></span> Source-linked evidence</p>
-              <h2 data-claim-count-title>Promises in.<br />Receipts out.</h2>
+              <h2 data-claim-count-title>Promises in.<br /> Receipts out.</h2>
             </div>
             <p>Every verdict stays attached to the claim, source line, exact Kane observation, corrected wording and its LambdaTest session.</p>
           </div>
 
-          <div class="evidence-grid" id="evidence-grid"></div>
+          <div class="evidence-grid" id="evidence-grid">
+            <article class="evidence-empty">
+              <p class="section-label"><span aria-hidden="true"></span> Awaiting evidence</p>
+              <h3>Run a documentation check to produce source-linked evidence.</h3>
+              <p>Submit a public GitHub repository and its live application URL above.</p>
+            </article>
+          </div>
         </div>
       </section>
 

@@ -20,7 +20,7 @@ Supporting references:
 
 ### Brief-specific principles
 
-1. **The form is the hero.** A judge must see the repository field and `Run documentation check` action without scrolling.
+1. **The form is the hero.** A judge must see the repository field, live application URL and `Run live Kane check` action without scrolling.
 2. **Evidence replaces imagery.** Every portfolio-like surface contains a real claim, source line, observation or deployment boundary—never decorative fake product shots.
 3. **Atmosphere frames truth.** Silver blur, soft borders and rounded surfaces establish the Portfolite mood but never communicate status or obscure text.
 
@@ -90,11 +90,11 @@ Status always includes visible text and a symbol. All normal text targets WCAG 2
 
 - Header: dark, compact witness mark/wordmark, four anchors. At 390 px it keeps the brand and action visible; secondary links occupy a second row rather than hiding behind a menu.
 - Hero: at least 760 px desktop and auto-height mobile; centered proposition, badge, lead and form. Original CSS gradients create two soft silver evidence fields behind the content.
-- Repository form: a wide combined control on desktop; label remains visible to assistive technology and visually present above the field. Input and action stack under 700 px.
-- Disclosure: directly under the form, explicit that captured fixture evidence is displayed and the URL is not inspected.
+- Repository form: two stacked labelled URL controls followed by one wide action. The repository identifies the documentation; the live application URL identifies what Kane must observe. Controls remain visible above the fold and stack naturally under 700 px.
+- Disclosure: directly under the form, explicit that the hosted audit clones public Markdown into an isolated temporary job, runs a real Kane check and deletes the workspace. It also states the one-claim hosted edge bound.
 - Pipeline: five stages, centered near the hero floor; horizontal desktop, wrapped/stacked mobile.
 - Truth report: dark section with a light summary surface, score and three counts; followed by an evidence mosaic.
-- Evidence mosaic: first failed claim spans two columns, remaining claims fill a responsive two-column grid. DOM order stays linear. Each card includes status, title, source, docs statement, observed behavior and optional corrected wording.
+- Evidence mosaic: first failed claim spans two columns, remaining claims fill a responsive two-column grid. DOM order stays linear. Every card exposes the claim text, exact Kane observation, corrected wording or an honest not-applicable note, source file plus line, and a session row. Executed claims link to their own LambdaTest session; unverifiable claims state why no session exists.
 - Method: a light section inspired by an editorial portfolio biography; clear explanation plus five verification phases.
 - CLI: dark terminal surface with the exact local execution boundary.
 - Footer: compact brand, status links and MIT disclosure.
@@ -109,8 +109,9 @@ Breakpoints:
 
 - Empty: input and action are visible; report is hidden.
 - Invalid: value remains, input gets `aria-invalid`, inline error explains the required GitHub format, focus returns to the input and the live region announces it without duplicate visible text.
-- Loading: form uses `aria-busy`; input and button disable; the button says `Checking documentation…`; status text progresses through reading, Kane-flow generation and report assembly without layout shift.
-- Success: submitted repository is echoed, report reveals, report receives focus and the action language resolves to a generated truth report.
+- Loading: form uses `aria-busy`; both inputs and the button disable; the button says `Running live Kane check…`; a single honest status explains that live browser work can take up to several minutes. No synthetic stage timer claims work that the backend has not reported.
+- Busy/rate/provider error: the report stays hidden; a persistent inline alert explains whether to retry later, correct the URLs or use the local CLI.
+- Success: submitted repository and target are echoed, the live report reveals, the report receives focus and every card is generated from the returned API JSON.
 - No JavaScript: proposition, disclosure, method and CLI remain readable; the form explains the limitation.
 
 ## Motion

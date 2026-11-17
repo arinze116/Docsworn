@@ -27,6 +27,7 @@ export interface KaneObservation {
   claimId: string;
   status: ResultStatus;
   summary: string;
+  sessionUrl?: string;
   exitCode?: number;
   durationMs?: number;
   source: "live-kane" | "captured-kane" | "not-run";
@@ -57,4 +58,13 @@ export interface AuditOutput {
   executionMode: "live-kane" | "captured-kane" | "not-run";
   summary: AuditSummary;
   claims: AuditedClaim[];
+}
+
+export interface HostedCheckRequest {
+  repositoryUrl: string;
+  targetUrl: string;
+}
+
+export interface HostedCheckResponse extends AuditOutput {
+  requestId: string;
 }

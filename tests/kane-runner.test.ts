@@ -18,12 +18,56 @@ describe("AT-4 Kane result mapping", () => {
       timeoutMs: 100,
       execute: async () => ({
         code: 0,
-        stdout: '{"type":"test_md_done","overall_status":"passed","summary":"Save worked"}\n',
+        stdout: [
+          '{"type":"run_end","status":"passed","summary":"Save worked"}',
+          '{"type":"test_md_done","overall_status":"passed","share_url":"https://test-manager.lambdatest.com/projects/project/test-cases/case/dashboard/share/token?type=summary"}',
+        ].join("\n"),
+        stderr: "A harmless Kane advisory",
+        durationMs: 12,
+      }),
+    });
+    expect(result).toMatchObject({
+      status: "passed",
+      summary: "Save worked",
+      source: "live-kane",
+      sessionUrl: "https://test-manager.lambdatest.com/projects/project/test-cases/case/dashboard/share/token?type=summary",
+    });
+  });
+
+  it("prefers the exact run observation over a later summary event without text", async () => {
+    const [result] = await runKaneFlows({
+      flows: [flow],
+      kaneBinary: "kane-cli",
+      timeoutMs: 100,
+      execute: async () => ({
+        code: 1,
+        stdout: [
+          '{"type":"run_end","status":"failed","summary":"Kane saw the Save button remain disabled."}',
+          '{"type":"test_md_done","overall_status":"failed","share_url":"https://test-manager.lambdatest.com/projects/project/test-cases/case/dashboard/share/token"}',
+        ].join("\n"),
+        stderr: "A non-result advisory",
+        durationMs: 12,
+      }),
+    });
+    expect(result).toMatchObject({
+      status: "failed",
+      summary: "Kane saw the Save button remain disabled.",
+    });
+  });
+
+  it("R-HOSTED-TRUTH-1 rejects a non-LambdaTest session URL", async () => {
+    const [result] = await runKaneFlows({
+      flows: [flow],
+      kaneBinary: "kane-cli",
+      timeoutMs: 100,
+      execute: async () => ({
+        code: 0,
+        stdout: '{"type":"test_md_done","overall_status":"passed","summary":"Save worked","test_url":"https://example.com/not-evidence"}\n',
         stderr: "",
         durationMs: 12,
       }),
     });
-    expect(result).toMatchObject({ status: "passed", summary: "Save worked", source: "live-kane" });
+    expect(result?.sessionUrl).toBeUndefined();
   });
 
   it("keeps product failures distinct from runner errors", async () => {

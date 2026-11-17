@@ -13,6 +13,8 @@ interface KaneEvent {
   overall_status?: string;
   summary?: string;
   remark?: string;
+  test_url?: string;
+  share_url?: string;
 }
 
 function parseEvents(stdout: string): KaneEvent[] {
@@ -29,7 +31,9 @@ function parseEvents(stdout: string): KaneEvent[] {
 }
 
 function summarize(events: KaneEvent[], stderr: string): string {
-  const completion = [...events].reverse().find((event) => event.type === "test_md_done" || event.type === "run_end");
+  const completion = [...events].reverse().find(
+    (event) => (event.type === "test_md_done" || event.type === "run_end") && event.summary,
+  );
   if (completion?.summary) return completion.summary;
   const failed = [...events].reverse().find((event) => event.status === "failed");
   return failed?.remark || stderr.trim() || "Kane returned no textual summary";
@@ -44,6 +48,19 @@ function statusFrom(code: number, events: KaneEvent[]): ResultStatus {
   return "error";
 }
 
+function sessionUrlFrom(events: KaneEvent[]): string | undefined {
+  const evidenceEvent = [...events].reverse().find((event) => event.share_url || event.test_url);
+  const candidate = evidenceEvent?.share_url ?? evidenceEvent?.test_url;
+  if (!candidate) return undefined;
+  try {
+    const url = new URL(candidate);
+    if (url.protocol !== "https:" || url.hostname !== "test-manager.lambdatest.com") return undefined;
+    return url.toString();
+  } catch {
+    return undefined;
+  }
+}
+
 export async function runKaneFlows(options: {
   flows: GeneratedFlow[];
   kaneBinary: string;
@@ -55,16 +72,20 @@ export async function runKaneFlows(options: {
   for (const flow of options.flows) {
     const startedAt = performance.now();
     try {
+      const kaneTimeoutSeconds = Math.max(1, Math.floor(options.timeoutMs / 1_000) - 5);
+      const args = ["testmd", "run", flow.path, "--agent", "--headless", "--timeout", String(kaneTimeoutSeconds), "--on-lock-conflict", "wait"];
       const result = await execute({
         command: options.kaneBinary,
-        args: ["testmd", "run", flow.path, "--agent", "--headless", "--on-lock-conflict", "wait"],
+        args,
         timeoutMs: options.timeoutMs,
       });
       const events = parseEvents(result.stdout);
+      const sessionUrl = sessionUrlFrom(events);
       observations.push({
         claimId: flow.claim.id,
         status: statusFrom(result.code, events),
         summary: summarize(events, result.stderr),
+        ...(sessionUrl ? { sessionUrl } : {}),
         exitCode: result.code,
         durationMs: result.durationMs,
         source: "live-kane",

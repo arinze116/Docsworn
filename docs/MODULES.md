@@ -39,3 +39,11 @@
 - **Fails how:** unwritable output aborts without changing docs.
 - **Hard part:** honest wording when evidence is incomplete.
 - **Red tests:** report acceptance snapshots and deterministic replacement tests.
+
+### static evidence site
+- **Owns:** public explanation, deterministic report rendering, quick start and deployment disclosure.
+- **Promises:** no runtime API calls, forms, credentials or secret names; captured evidence remains visibly labelled (R-STATIC-1).
+- **Depends on:** committed HTML/CSS and Vercel static hosting.
+- **Fails how:** an unavailable host removes the optional web presentation but does not affect the CLI or report generation.
+- **Hard part:** making the hackathon entry immediately understandable without pretending the server can execute Kane.
+- **Red tests:** `R-STATIC-1 Vercel evidence site` checks semantics, disclosure, secret absence and payload budget.

@@ -8,3 +8,4 @@
 - Added truth reports, captured-evidence fallback, and closed-loop documentation suggestions.
 - Added timeout, credential-redaction, acceptance, and deterministic demo coverage.
 - Added a pinned GitHub Actions pull-request gate template.
+- Added a static, accessible Vercel evidence site with no runtime secret dependency.

@@ -1,85 +1,78 @@
 # Docsworn web reference notes
 
-Research date: 2026-11-17. Scope: redesign the public, static judge-facing surface for the Docsworn CLI while preserving the visible repository check, captured-evidence disclosure, truth report and local-first positioning.
+Research date: 2026-11-17. Current pass: adapt the official Framer Portfolite template’s presentation language to Docsworn without copying template code, branding, imagery or proprietary assets.
 
-All external work below is reference material only. No template code, artwork, logo or proprietary asset is used in production.
+## Product constraints
+
+Docsworn is a local-first documentation verification CLI. The public Vercel site is a static interactive demonstration and must keep the GitHub repository field, invalid/loading/success states, source-linked truth report, captured-evidence disclosure and honest boundary between the hosted demo and local Kane execution.
 
 ## Pinterest research
 
 Queries inspected with the global Pinterest MCP:
 
-- `developer tool landing page identity editorial interface`
-- `document verification software branding logo UI`
-- `code audit report dashboard dark red UI`
+- `minimal editorial portfolio website black white red typography`
+- `dark monochrome portfolio website blurred silver abstract web design`
+- `minimal portfolio website case study grid black white ui`
 
-Selected references:
+Selected cross-checks:
 
-1. Playerzero editorial developer site
-   - Image: https://i.pinimg.com/originals/f6/c5/69/f6c5699cbcb335a9b6faa306b59ae2fe.png
-   - Local: `pinterest/playerzero-editorial.png`
-   - Useful: a quiet grid, compact navigation, a large technical thesis and evidence connected by fine rules. The dotted display treatment is memorable, but Docsworn will not copy it.
-2. Agentic modular black/white identity
-   - Image: https://i.pinimg.com/originals/dd/7c/8c/dd7c8c71d1bb47ca80a8b04e44a2a272.jpg
-   - Local: `pinterest/agentic-modular.jpg`
-   - Useful: a strict monochrome identity can still feel alive when one transition texture carries the concept. Docsworn adapts the restraint, not the particle field.
-3. Nexora deep-red audit/dashboard system
-   - Image: https://i.pinimg.com/originals/0d/57/26/0d57264b8b2e3df68ace35d463b68ccd.jpg
-   - Local: `pinterest/nexora-audit.jpg`
-   - Useful: deep red gives failed evidence urgency and dark product surfaces make dense results legible. Docsworn uses red as a disciplined evidence accent rather than flooding the full interface.
+1. Fylla / Portfolite-style monochrome hero
+   - Image: https://i.pinimg.com/originals/88/c2/26/88c226ea477f0b3fbc1741c38754c35d.jpg
+   - Source: https://www.behance.net/gallery/251599417/Exceptional-User-Journeys/
+   - Local: `pinterest/portfolite-pass/01_88c226ea477f0b3fbc1741c38754c35d.jpg`
+   - Useful: low-contrast silver framing, centered one-sentence proposition and two immediate actions.
+2. Measure minimal portfolio system
+   - Image: https://i.pinimg.com/originals/d3/ce/a8/d3cea8edfc86634c454ef306949fd259.png
+   - Source: https://measure-template.webflow.io/
+   - Local: `pinterest/portfolite-pass/02_d3cea8edfc86634c454ef306949fd259.png`
+   - Useful: strong dark/light section contrast, disciplined case-study grid and generous readable text measures.
 
-Earlier report and checker references remain in this folder because they informed the first version. They are not part of the redesign shortlist.
+The red brutalist search results were useful as a warning: Docsworn’s existing red remains a small witness-mark accent, not a full-page visual effect.
 
 ## Framer Marketplace research
 
-Official detail pages and their live presentations were rendered at 1440 × 1000. The captured review set is in `framer/research-2026-11-17/`.
+Five official detail pages and their live presentations were inspected at 1440 × 1000. Portfolite was also inspected at 390 × 844.
 
-1. AgentLab
-   - Detail: https://www.framer.com/marketplace/templates/agentlab/
-   - Live: https://agentlab.framer.ai/
-   - Useful: editorial serif headline, visible page grid and deliberate black/white controls.
-   - Avoid: the generic AI collage and borrowed trust signals.
-2. Aoutive
-   - Detail: https://www.framer.com/marketplace/templates/aoutive-website/
-   - Live: https://aoutive.framer.website/
-   - Useful: strong centered hierarchy, clear first action and a product diagram that explains flow without a feature-card wall.
-   - Avoid: an oversized decorative illustration before concrete product evidence.
-3. Intelli
-   - Detail: https://www.framer.com/marketplace/templates/intelli/
-   - Live: https://intelli.framer.website/
-   - Useful: confident type over a full-bleed field and a compact two-action opening.
-   - Avoid: atmosphere that competes with the product and low-contrast overlay text.
-4. Cursor
-   - Detail: https://www.framer.com/marketplace/templates/cursor/
-   - Live: https://cursorswarm.framer.website/
-   - Useful: product proof in the first viewport, monospace annotations, scale labels and a composition that visibly behaves like a work surface.
-   - Avoid: decorative agent cursors, purple AI gradients and motion that obscures reading.
-5. AlphaOS
-   - Detail: https://www.framer.com/marketplace/templates/alphaos/
-   - Live: https://alphaos.framer.website/
-   - Useful: a strong split between thesis and a concrete code artefact.
-   - Avoid: template badges, warm glow decoration and excessive action variants.
+1. Portfolite — primary owner-selected reference
+   - Detail: https://www.framer.com/marketplace/templates/portfolite/
+   - Live: https://portfolite.framer.website/
+   - Local: `framer/portfolite-pass/portfolite-live.png`
+   - Verified presentation: black full-viewport hero, centered lightweight headline, soft monochrome abstract framing, outlined pill actions, compact navigation, grayscale project mosaic and generous section pacing.
+   - Adapt: composition, tonal hierarchy, restraint, rounded project surfaces and first-viewport confidence.
+   - Do not copy: its wording, image assets, customer marks, layout dimensions, animations or Satoshi font files.
+2. Finn
+   - Detail: https://www.framer.com/marketplace/templates/finn/
+   - Live: https://finn.framer.media/
+   - Local: `framer/portfolite-pass/finn-live.png`
+   - Useful: oversized typography with almost no decoration and a very clear work-first hierarchy.
+3. Mirelle
+   - Detail: https://www.framer.com/marketplace/templates/mirelle/
+   - Live: https://mirelle.framer.media/
+   - Useful: editorial project metadata and asymmetrical image composition.
+   - Avoid: imagery-driven storytelling that would make Docsworn invent product screenshots.
+4. Slab
+   - Detail: https://www.framer.com/marketplace/templates/slab/
+   - Live: https://slabtemplate.framer.website/
+   - Local: `framer/portfolite-pass/slab-live.png`
+   - Useful: project filters, precise two-column grid and metadata kept close to work.
+5. Vertical
+   - Detail: https://www.framer.com/marketplace/templates/vertical/
+   - Live: https://vertical.framer.media/
+   - Useful: confident scale, technical phase labels and an identifiable one-accent system.
+   - Avoid: neon colour dominance, image dependence and dense overlapping type.
 
 ## Shortlist and synthesis
 
-- Playerzero: adapt the ruled editorial grid and product-specific connective language.
-- AgentLab: adapt the black/white confidence and mixed editorial/technical typography.
-- Cursor: adapt the immediate proof surface and instrument-like annotations.
-- Nexora: adapt the controlled deep-red urgency for contradicted evidence.
+- Portfolite: centered monochrome hero, ambient silver framing, outlined actions and rounded gallery rhythm.
+- Finn: disciplined display scale and decisive whitespace.
+- Slab: evidence-like project grid and metadata adjacency.
 
-The resulting direction is original: **the sworn record**. A warm paper field holds an uncompromising black verification desk. A single affidavit-red accent identifies the claim currently under scrutiny. Source lines, brackets and docket numbers become the graphic language. The site remains a readable product demonstration, not a generic dashboard or a fictional live audit.
+The original Docsworn direction is **Evidence in Focus**: a nearly black verification studio where each documentation claim appears like a portfolio case study. Soft silver fields frame the interaction without carrying meaning. The red witness point remains the brand signature. The repository form is the hero’s central action; the truth report becomes the “selected work” grid.
 
-## Logo concept
+## Licensing and copyright
 
-The symbol is the **witness mark**: two square documentation brackets frame a red evidence point. It represents a claim isolated from prose and placed under test. It does not use a checkmark, shield, sparkle or robot motif. The construction survives at 16 px and works in full colour, reversed and monochrome variants.
+The Portfolite marketplace listing offers a free Framer remix, but this repository does not import its template package. Pinterest and Framer material is retained only as design reference. Production HTML, CSS, copy, SVGs and abstract fields are original; no reference image or template asset is shipped.
 
-Deliverables required by the identity pass:
+## Previous direction
 
-- Primary lockup, compact lockup, wordmark and standalone symbol.
-- Light, dark and monochrome SVG variants.
-- SVG favicon plus 16 px, 32 px, 180 px and 512 px raster assets.
-- Social avatar raster.
-- Inspection on light/dark backgrounds and at favicon, header and avatar sizes.
-
-## Copyright and licensing
-
-Pinterest and Framer material is retained only as internal design reference. The production identity, HTML, CSS and SVG geometry are original and use system fonts only.
+The earlier “sworn record” research remains in the dated image folders and Git history. Valid product constraints—candid disclosure, source-linked evidence, responsive form and original witness mark—are preserved; its warm-paper editorial styling is superseded by this owner-selected Portfolite pass.

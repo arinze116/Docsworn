@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f3efe5" />
+    <meta name="theme-color" content="#050505" />
     <meta
       name="description"
       content="Enter a GitHub repository and see how Docsworn turns documentation claims into a source-linked Kane truth report."
     />
-    <meta property="og:title" content="Docsworn — Documentation under oath" />
+    <meta property="og:title" content="Docsworn — Put your docs on the record" />
     <meta
       property="og:description"
-      content="Find the promises in your docs. Test them against the product. Keep the receipts."
+      content="Find every documentation promise. Test the product. Keep the receipts."
     />
     <meta property="og:type" content="website" />
-    <title>Docsworn — Documentation under oath</title>
+    <title>Docsworn — Put your docs on the record</title>
     <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/brand/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="/brand/favicon-16.png" sizes="16x16" type="image/png" />
@@ -26,218 +26,205 @@
 
     <header class="site-header" aria-label="Site header">
       <a class="brand" href="#top" aria-label="Docsworn home">
-        <img src="/brand/mark-light.svg" width="42" height="42" alt="" />
-        <span>docsworn<span class="brand-stop" aria-hidden="true">.</span></span>
+        <img src="/brand/mark-light.svg" width="40" height="40" alt="" />
+        <span>Docsworn</span>
       </a>
       <nav aria-label="Primary navigation">
         <a href="#report">Report</a>
         <a href="#method">Method</a>
         <a href="#quickstart">CLI</a>
       </nav>
-      <a class="header-action" href="#audit">Run a check <span aria-hidden="true">↘</span></a>
+      <a class="header-action" href="#audit"><span aria-hidden="true">●</span> Run a check</a>
     </header>
 
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow"><span>DS / 00</span> Documentation integrity, tested by Kane</p>
-          <h1 id="hero-title">
-            Documentation is not evidence.
-            <em>Until it survives the product.</em>
-          </h1>
-          <p class="hero-lead">
-            Docsworn isolates every behavioral promise in your Markdown, turns it into a traceable Kane test,
-            and records what the application actually did.
-          </p>
-          <p class="hero-proof">
-            <span aria-hidden="true"></span>
-            Claims in. Observations out. Source lines attached.
-          </p>
+        <div class="ambient-field" aria-hidden="true">
+          <span class="field field-left"></span>
+          <span class="field field-right"></span>
         </div>
 
-        <aside class="audit-desk" id="audit" aria-labelledby="audit-title">
-          <div class="desk-bar">
-            <span>Verification desk</span>
-            <code>CAPTURED / FIXTURE</code>
-          </div>
-          <div class="desk-body">
-            <p class="desk-index">01 — Repository intake</p>
-            <h2 id="audit-title">Put the docs under oath.</h2>
-            <p class="desk-intro">Start with one public GitHub repository. The report keeps every finding tied to its source.</p>
+        <div class="hero-content">
+          <p class="hero-badge"><span aria-hidden="true"></span> Documentation integrity agent</p>
+          <h1 id="hero-title"><span>Put your docs</span><span>on the record.</span></h1>
+          <p class="hero-lead">
+            Find every behavioral promise in your Markdown. Turn it into a Kane check. Record what the product actually did.
+          </p>
+
+          <div class="audit-panel" id="audit">
             <form id="audit-form" novalidate>
-              <label for="repo-url">GitHub repository URL</label>
-              <input
-                id="repo-url"
-                name="repository"
-                type="url"
-                inputmode="url"
-                autocomplete="url"
-                spellcheck="false"
-                placeholder="https://github.com/owner/repository"
-                aria-describedby="repo-help repo-error"
-                required
-              />
-              <p class="field-help" id="repo-help">Public HTTPS GitHub owner/repository URL only.</p>
-              <p class="field-error" id="repo-error" hidden></p>
-              <button id="run-button" type="submit" data-idle-label="Run documentation check">
-                <span>Run documentation check</span><span aria-hidden="true">→</span>
-              </button>
+              <label for="repo-url" class="repository-label">GitHub repository URL</label>
+              <div class="repository-control">
+                <input
+                  id="repo-url"
+                  name="repository"
+                  type="url"
+                  inputmode="url"
+                  autocomplete="url"
+                  spellcheck="false"
+                  placeholder="https://github.com/owner/repository"
+                  aria-describedby="repo-help repo-error"
+                  required
+                />
+                <button id="run-button" type="submit" data-idle-label="Run documentation check">
+                  Run documentation check <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+              <div class="form-meta">
+                <p class="field-help" id="repo-help">Public HTTPS GitHub owner/repository URL only.</p>
+                <p class="field-error" id="repo-error" hidden></p>
+              </div>
               <p class="run-status" id="run-status" role="status" aria-live="polite" aria-atomic="true"></p>
             </form>
+            <p class="demo-disclosure">
+              <span aria-hidden="true">◎</span> Hosted demo uses captured fixture evidence. It does not clone or inspect the URL you enter.
+            </p>
+            <noscript><p class="field-error noscript">JavaScript is required for the browser demo. The local CLI remains fully available.</p></noscript>
           </div>
-          <p class="demo-disclosure">
-            Hosted demo: captured deterministic evidence. This page does not clone or inspect the URL you enter.
-          </p>
-          <noscript><p class="field-error noscript">JavaScript is required for the browser demo. The local CLI remains fully available.</p></noscript>
-        </aside>
-      </section>
+        </div>
 
-      <section class="signal-rail" aria-label="Docsworn verification flow">
-        <span>README.md</span><b aria-hidden="true">→</b>
-        <span>Behavioral claims</span><b aria-hidden="true">→</b>
-        <span>Kane flows</span><b aria-hidden="true">→</b>
-        <span>Observed product</span><b aria-hidden="true">→</b>
-        <span>Corrected wording</span>
+        <ol class="signal-rail" aria-label="Docsworn verification flow">
+          <li><span>01</span> Read docs</li>
+          <li><span>02</span> Isolate claims</li>
+          <li><span>03</span> Write Kane checks</li>
+          <li><span>04</span> Observe product</li>
+          <li><span>05</span> Correct wording</li>
+        </ol>
       </section>
 
       <section class="report" id="report" aria-labelledby="report-title" tabindex="-1" hidden>
-        <header class="report-masthead">
-          <div>
-            <p class="eyebrow eyebrow-inverse"><span>DS / REPORT 001</span> Documentation Truth Report</p>
-            <h2 id="report-title">The record does not match the promise.</h2>
-            <p class="report-repository">
-              Submitted repository: <strong data-repository-name>owner/repository</strong>. This demonstration uses captured
-              fixture evidence; it is not a claim about that repository's current contents.
+        <div class="report-shell">
+          <header class="report-heading">
+            <p class="section-label"><span aria-hidden="true"></span> Documentation Truth Report</p>
+            <h2 id="report-title">The product changed.<br />The docs did not.</h2>
+            <p>
+              Submitted repository: <strong data-repository-name>owner/repository</strong>. This browser result uses captured
+              fixture evidence; it is not a claim about that repository’s current contents.
             </p>
-          </div>
-          <aside class="truth-score" aria-label="Documentation truth score">
-            <div class="score-line"><strong>25</strong><span>/100<br />truth score</span></div>
-            <p>1 of 4 executable claims verified.</p>
-          </aside>
-        </header>
+          </header>
 
-        <div class="report-counts" aria-label="Report counts">
-          <p><span>01</span> Passed</p>
-          <p><span>03</span> Failed</p>
-          <p><span>01</span> Unverifiable</p>
-          <p class="evidence-label"><i aria-hidden="true"></i> Captured deterministic Kane evidence</p>
-        </div>
-
-        <div class="docket-heading">
-          <div>
-            <p class="eyebrow eyebrow-inverse"><span>05 claims</span> Fixture repository · README.md</p>
-            <h2>The evidence docket.</h2>
-          </div>
-          <p>Every verdict stays beside the sentence that made the promise—and the observation that challenged it.</p>
-        </div>
-
-        <div class="claim-list">
-          <article class="claim claim-failed" aria-labelledby="claim-001-title">
-            <header class="claim-header">
-              <span class="claim-number">001</span>
-              <div>
-                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
-                <h3 id="claim-001-title">The button label drifted.</h3>
-              </div>
-              <code>README.md:7</code>
-            </header>
-            <div class="claim-grid">
-              <div><span>Docs say</span><blockquote>Open /register and click “Submit” to create a new account.</blockquote></div>
-              <div><span>Kane observed</span><p>Expected “Submit”; actual “Create account”. The documented button was not present.</p></div>
+          <div class="truth-board">
+            <div class="truth-score" aria-label="Documentation truth score">
+              <span class="score-value">25</span>
+              <span class="score-unit">/100<br />truth score</span>
             </div>
-            <p class="suggestion"><strong>Correct the record</strong> Open /register and click “Create account” to create a new account.</p>
-          </article>
+            <p class="score-summary">1 of 4 executable claims verified.</p>
+            <dl class="score-counts">
+              <div><dt>Passed</dt><dd>01</dd></div>
+              <div><dt>Failed</dt><dd>03</dd></div>
+              <div><dt>Unverifiable</dt><dd>01</dd></div>
+            </dl>
+            <p class="evidence-stamp"><span aria-hidden="true"></span> Captured deterministic Kane evidence</p>
+          </div>
 
-          <article class="claim claim-failed" aria-labelledby="claim-002-title">
-            <header class="claim-header">
-              <span class="claim-number">002</span>
-              <div>
-                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
-                <h3 id="claim-002-title">The success message changed.</h3>
-              </div>
-              <code>README.md:8</code>
-            </header>
-            <div class="claim-grid">
-              <div><span>Docs say</span><blockquote>After registration, the page displays “Welcome aboard”.</blockquote></div>
-              <div><span>Kane observed</span><p>Expected “Welcome aboard”; actual “Account queued for review.”</p></div>
+          <div class="evidence-intro">
+            <div>
+              <p class="section-label"><span aria-hidden="true"></span> Selected evidence · README.md</p>
+              <h2>Five promises.<br />Five receipts.</h2>
             </div>
-            <p class="suggestion"><strong>Correct the record</strong> After registration, the page displays “Account queued for review.”</p>
-          </article>
+            <p>Every verdict stays attached to the source sentence, the observed product behavior and a corrected wording when the record drifted.</p>
+          </div>
 
-          <article class="claim claim-passed" aria-labelledby="claim-003-title">
-            <header class="claim-header">
-              <span class="claim-number">003</span>
-              <div>
+          <div class="evidence-grid">
+            <article class="evidence-card evidence-featured claim-failed" aria-labelledby="claim-001-title">
+              <header class="evidence-card-header">
+                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
+                <code>README.md:7</code>
+              </header>
+              <h3 id="claim-001-title">The button label drifted.</h3>
+              <div class="evidence-comparison">
+                <div><span>Docs say</span><blockquote>Open /register and click “Submit” to create a new account.</blockquote></div>
+                <div><span>Kane observed</span><p>Expected “Submit”; actual “Create account”. The documented button was not present.</p></div>
+              </div>
+              <p class="suggestion"><strong>Correct the record</strong> Open /register and click “Create account” to create a new account.</p>
+            </article>
+
+            <article class="evidence-card claim-failed" aria-labelledby="claim-002-title">
+              <header class="evidence-card-header">
+                <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
+                <code>README.md:8</code>
+              </header>
+              <h3 id="claim-002-title">The success message changed.</h3>
+              <div class="evidence-comparison">
+                <div><span>Docs say</span><blockquote>After registration, the page displays “Welcome aboard”.</blockquote></div>
+                <div><span>Kane observed</span><p>Expected “Welcome aboard”; actual “Account queued for review.”</p></div>
+              </div>
+              <p class="suggestion"><strong>Correct the record</strong> After registration, the page displays “Account queued for review.”</p>
+            </article>
+
+            <article class="evidence-card claim-passed" aria-labelledby="claim-003-title">
+              <header class="evidence-card-header">
                 <p class="claim-status"><span aria-hidden="true">✓</span> Passed</p>
-                <h3 id="claim-003-title">Native email validation still holds.</h3>
+                <code>README.md:9</code>
+              </header>
+              <h3 id="claim-003-title">Native email validation still holds.</h3>
+              <div class="evidence-comparison">
+                <div><span>Docs say</span><blockquote>The email field rejects addresses without an @ symbol.</blockquote></div>
+                <div><span>Kane observed</span><p>The browser blocked submission for an email without an @ symbol.</p></div>
               </div>
-              <code>README.md:9</code>
-            </header>
-            <div class="claim-grid">
-              <div><span>Docs say</span><blockquote>The email field rejects addresses without an @ symbol.</blockquote></div>
-              <div><span>Kane observed</span><p>The browser blocked submission for an email without an @ symbol.</p></div>
-            </div>
-          </article>
+            </article>
 
-          <article class="claim claim-failed" aria-labelledby="claim-004-title">
-            <header class="claim-header">
-              <span class="claim-number">004</span>
-              <div>
+            <article class="evidence-card claim-failed" aria-labelledby="claim-004-title">
+              <header class="evidence-card-header">
                 <p class="claim-status"><span aria-hidden="true">×</span> Failed</p>
-                <h3 id="claim-004-title">Registration no longer redirects.</h3>
+                <code>README.md:10</code>
+              </header>
+              <h3 id="claim-004-title">Registration no longer redirects.</h3>
+              <div class="evidence-comparison">
+                <div><span>Docs say</span><blockquote>Registration automatically signs the user in and opens /dashboard.</blockquote></div>
+                <div><span>Kane observed</span><p>Expected “/dashboard”; actual “/register”. The user remained on the registration page.</p></div>
               </div>
-              <code>README.md:10</code>
-            </header>
-            <div class="claim-grid">
-              <div><span>Docs say</span><blockquote>Registration automatically signs the user in and opens /dashboard.</blockquote></div>
-              <div><span>Kane observed</span><p>Expected “/dashboard”; actual “/register”. The user remained on the registration page.</p></div>
-            </div>
-            <p class="suggestion"><strong>Correct the record</strong> After registration, the user remains on /register.</p>
-          </article>
+              <p class="suggestion"><strong>Correct the record</strong> After registration, the user remains on /register.</p>
+            </article>
 
-          <article class="claim claim-warning" aria-labelledby="claim-005-title">
-            <header class="claim-header">
-              <span class="claim-number">005</span>
-              <div>
+            <article class="evidence-card claim-warning" aria-labelledby="claim-005-title">
+              <header class="evidence-card-header">
                 <p class="claim-status"><span aria-hidden="true">!</span> Unverifiable</p>
-                <h3 id="claim-005-title">“Fast and easy” has no pass condition.</h3>
+                <code>README.md:11</code>
+              </header>
+              <h3 id="claim-005-title">“Fast and easy” has no pass condition.</h3>
+              <div class="evidence-comparison">
+                <div><span>Docs say</span><blockquote>Registration will always be fast and easy.</blockquote></div>
+                <div><span>Docsworn classified</span><p>Subjective wording has no observable pass condition.</p></div>
               </div>
-              <code>README.md:11</code>
-            </header>
-            <div class="claim-grid">
-              <div><span>Docs say</span><blockquote>Registration will always be fast and easy.</blockquote></div>
-              <div><span>Docsworn classified</span><p>Subjective wording has no observable pass condition.</p></div>
-            </div>
-          </article>
+            </article>
+          </div>
         </div>
       </section>
 
       <section class="method" id="method" aria-labelledby="method-title">
-        <div class="section-intro">
-          <p class="eyebrow"><span>DS / METHOD</span> The closed loop</p>
-          <h2 id="method-title">From sentence to testimony.</h2>
-          <p>Docsworn follows the claim all the way through execution, then sends the observation back to the documentation.</p>
+        <div class="method-shell">
+          <div class="method-copy">
+            <p class="section-label section-label-dark"><span aria-hidden="true"></span> Meet Docsworn</p>
+            <h2 id="method-title">An agent that cross-examines the docs.</h2>
+            <p>
+              Docsworn reads Markdown like a contract: it isolates testable behavior, creates one Kane check per promise and brings the observation back to the sentence that made the claim.
+            </p>
+            <a href="#quickstart">Run it where the code lives <span aria-hidden="true">↗</span></a>
+          </div>
+
+          <ol class="method-list">
+            <li><span>01</span><div><strong>Read documentation</strong><small>Markdown plus source lines</small></div></li>
+            <li><span>02</span><div><strong>Extract claims</strong><small>Testable or unverifiable</small></div></li>
+            <li><span>03</span><div><strong>Generate Kane checks</strong><small>One flow per promise</small></div></li>
+            <li><span>04</span><div><strong>Capture observations</strong><small>Exit codes and runner output</small></div></li>
+            <li><span>05</span><div><strong>Suggest corrected wording</strong><small>Evidence closes the loop</small></div></li>
+          </ol>
         </div>
-        <ol class="method-list">
-          <li><span>01</span><div><strong>Read the record</strong><small>Markdown plus source lines</small></div></li>
-          <li><span>02</span><div><strong>Isolate the claims</strong><small>Testable or unverifiable</small></div></li>
-          <li><span>03</span><div><strong>Write Kane flows</strong><small>One flow per promise</small></div></li>
-          <li><span>04</span><div><strong>Observe the product</strong><small>Exit codes and runner output</small></div></li>
-          <li><span>05</span><div><strong>Correct the wording</strong><small>Evidence closes the loop</small></div></li>
-        </ol>
       </section>
 
       <section class="quickstart" id="quickstart" aria-labelledby="quickstart-title">
-        <div class="quickstart-copy">
-          <p class="eyebrow eyebrow-inverse"><span>DS / LOCAL</span> Local-first by design</p>
-          <h2 id="quickstart-title">Run the proof where the code lives.</h2>
-          <p>
-            Real repository and Kane execution remain in the local CLI. That is where Docsworn clones public repositories,
-            generates traceable tests, reads Kane exit codes and writes the report.
-          </p>
-          <a href="#limits">Read the exact deployment status <span aria-hidden="true">→</span></a>
-        </div>
-        <pre aria-label="Docsworn quickstart command"><code><span class="terminal-note"># install, verify, inspect</span>
+        <div class="quickstart-shell">
+          <div class="quickstart-copy">
+            <p class="section-label"><span aria-hidden="true"></span> Local-first by design</p>
+            <h2 id="quickstart-title">Run the proof where the code lives.</h2>
+            <p>
+              Real repository and Kane execution remain in the local CLI. That is where Docsworn clones public repositories,
+              generates traceable tests, reads Kane exit codes and writes the report.
+            </p>
+            <a href="#limits">Read the exact deployment status <span aria-hidden="true">↗</span></a>
+          </div>
+          <pre aria-label="Docsworn quickstart command"><code><span class="terminal-note"># install, verify, inspect</span>
 <span class="prompt">$</span> npm ci
 <span class="prompt">$</span> npm run ci
 <span class="prompt">$</span> npm run demo
@@ -245,25 +232,28 @@
 <span class="terminal-result">Docsworn audited 5 claims.</span>
 Truth score: 25%.
 Report: doctruth-report.md</code></pre>
+        </div>
       </section>
 
       <section class="limits" id="limits" aria-labelledby="limits-title">
-        <div class="limits-heading">
-          <p class="eyebrow"><span>DS / STATUS</span> Exact deployment status</p>
-          <h2 id="limits-title">No theatre. Just the boundary.</h2>
-        </div>
-        <div class="limits-grid">
-          <p><span>It is</span> an accessible browser demonstration of the repository-to-report workflow.</p>
-          <p><span>It uses</span> captured deterministic Kane evidence so the public demo stays stable and credential-free.</p>
-          <p><span>It is not</span> a hosted Kane runner or proof that the submitted repository was inspected.</p>
+        <div class="limits-shell">
+          <div class="limits-heading">
+            <p class="section-label"><span aria-hidden="true"></span> Exact deployment status</p>
+            <h2 id="limits-title">The boundary is part of the evidence.</h2>
+          </div>
+          <div class="limits-grid">
+            <p><span>It is</span> an accessible browser demonstration of the repository-to-report workflow.</p>
+            <p><span>It uses</span> captured deterministic Kane evidence so the public demo stays stable and credential-free.</p>
+            <p><span>It is not</span> a hosted Kane runner or proof that the submitted repository was inspected.</p>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
       <a class="footer-brand" href="#top" aria-label="Docsworn home">
-        <img src="/brand/mark-dark.svg" width="48" height="48" alt="" />
-        <span>docsworn<span aria-hidden="true">.</span></span>
+        <img src="/brand/mark-light.svg" width="44" height="44" alt="" />
+        <span>Docsworn</span>
       </a>
       <p>Documentation under oath. Built for Kane CLI. MIT licensed.</p>
       <div>

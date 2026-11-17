@@ -84,6 +84,25 @@ describe("R-BROWSER-DEMO-1 Vercel browser demo", () => {
     }
   });
 
+  it("ships the Portfolite-informed evidence layout without template runtime dependencies", async () => {
+    const [html, css, design] = await Promise.all([
+      readFile("public/index.html", "utf8"),
+      readFile("public/styles.css", "utf8"),
+      readFile("design.md", "utf8"),
+    ]);
+
+    expect(html).toContain("Put your docs");
+    expect(html).toContain("on the record.");
+    expect(html).toContain('class="repository-control"');
+    expect(html).toContain('class="evidence-grid"');
+    expect(html).toContain('class="ambient-field"');
+    expect(css).toContain("--void: #050505");
+    expect(css).toContain("border-radius: 999px");
+    expect(css).toContain(".evidence-grid");
+    expect(design).toContain("https://www.framer.com/marketplace/templates/portfolite/");
+    expect(html + css).not.toMatch(/framer-motion|framer\.website|Satoshi|i\.pinimg\.com/);
+  });
+
   it("accepts only canonical public HTTPS GitHub repository URLs", () => {
     expect(parseRepositoryUrl("https://github.com/arinze116/Docsworn")).toEqual({
       ok: true,

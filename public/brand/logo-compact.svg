@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="452" height="96" viewBox="0 0 452 96" role="img" aria-labelledby="title">
+  <title id="title">Docsworn compact logo</title>
+  <g transform="translate(8 8)">
+    <rect width="80" height="80" fill="#101012"/>
+    <path d="M29 19H18V61H29M51 19H62V61H51" fill="none" stroke="#F3EFE5" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+    <rect x="35" y="35" width="10" height="10" fill="#D4382C"/>
+  </g>
+  <text x="108" y="65" fill="#101012" font-family="Arial, Helvetica, sans-serif" font-size="62" font-weight="800" letter-spacing="-3">docsworn</text>
+  <rect x="429" y="55" width="7" height="7" fill="#D4382C"/>
+</svg>

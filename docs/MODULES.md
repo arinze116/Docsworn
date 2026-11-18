@@ -66,8 +66,8 @@
 
 ### hosted service deployment
 - **Owns:** worker, loopback Nginx and outbound quick-tunnel lifecycle.
-- **Promises:** worker or Nginx restarts do not rotate the quick-tunnel hostname; an intentional tunnel restart is followed by a Vercel worker-URL update and deployment (R-HOSTED-AVAILABILITY-1).
+- **Promises:** worker or Nginx restarts do not rotate the quick-tunnel hostname; an intentional tunnel restart is followed by a Vercel worker-URL update and deployment; service and mirror paths resolve to the deployed repository root before restart (R-HOSTED-AVAILABILITY-1, R-HOSTED-PATH-1).
 - **Depends on:** systemd, Nginx, cloudflared and the Vercel production environment.
 - **Fails how:** a stale tunnel hostname returns a non-JSON Cloudflare response that the Vercel proxy safely maps to `INVALID_WORKER_RESPONSE`.
 - **Hard part:** accountless quick tunnels have generated hostnames and no uptime guarantee.
-- **Red tests:** the tunnel unit uses `Wants`, not `Requires`, for the worker and Nginx services.
+- **Red tests:** the tunnel unit uses `Wants`, not `Requires`, for the worker and Nginx services; service and mirror files reject the retired repository path.

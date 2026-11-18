@@ -40,7 +40,7 @@ describe("hosted Docker runner", () => {
       jobsRoot,
       repositoryMirror: {
         repositoryUrl: "https://github.com/arinze116/Docsworn",
-        sourcePath: "/home/ubuntu/Docsworn",
+        sourcePath: "/home/ubuntu/projects/Docsworn",
       },
       execute: async (request) => {
         dockerArguments = request.args;
@@ -56,7 +56,7 @@ describe("hosted Docker runner", () => {
       requestId,
     );
 
-    expect(dockerArguments).toContain("type=bind,src=/home/ubuntu/Docsworn,dst=/work/repository,readonly");
+    expect(dockerArguments).toContain("type=bind,src=/home/ubuntu/projects/Docsworn,dst=/work/repository,readonly");
     expect(dockerArguments).toContain("DOCSWORN_REPOSITORY_PATH=/work/repository");
   });
 });

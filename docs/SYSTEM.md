@@ -45,6 +45,7 @@
 - R-HOSTED-TRUTH-1: hosted results are returned only from `live-kane` observations; each executed claim retains its exact observation, source line, suggested correction and validated LambdaTest session URL.
 - R-HOSTED-DURATION-1: hosted checks use Kane's direct `run` surface while the local CLI keeps authored `testmd` execution; the hosted path must complete within the public edge deadline.
 - R-HOSTED-AVAILABILITY-1: restarting the worker or Nginx must not restart the accountless quick tunnel and invalidate Vercel's configured worker URL.
+- R-HOSTED-PATH-1: worker, network and trusted-mirror deployment paths must resolve to the current repository root before a worker restart or hosted audit.
 - R-BROWSER-DEMO-1: the Vercel root exposes labelled repository and live-target URL fields, calls `/api/check`, announces live progress/failures, and renders only the returned live result.
 
 ## Architecture

@@ -1,60 +1,49 @@
+import { GoogleGenerativeAI, type GenerativeModel } from "@google/generative-ai";
+
 import { ExternalServiceError } from "./errors.js";
 import { sanitizeText } from "./sanitize.js";
 import type { DocClaim } from "./types.js";
 
-const DEFAULT_MODEL = "gemini-3.8-flash";
+const DEFAULT_MODEL = "gemini-1.5-flash";
 const DEFAULT_TIMEOUT_MS = 15_000;
-
-interface GeminiResponse {
-  candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-}
 
 export interface GeminiOptions {
   apiKey: string;
-  model?: string;
   timeoutMs?: number;
-  fetchImpl?: typeof fetch;
   faultLeakSecrets?: boolean;
 }
 
 export class GeminiClient {
   readonly #options: GeminiOptions;
+  readonly #model: Pick<GenerativeModel, "generateContent">;
 
+  /** Creates a bounded Gemini JSON client for Docsworn's refinement steps. */
   public constructor(options: GeminiOptions) {
     this.#options = options;
+    const client = new GoogleGenerativeAI(options.apiKey);
+    this.#model = client.getGenerativeModel(
+      {
+        model: DEFAULT_MODEL,
+        generationConfig: { responseMimeType: "application/json", temperature: 0.1 },
+      },
+      { timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS },
+    );
   }
 
+  /** Generates and parses a JSON response from Gemini. */
   public async generateJson<T>(prompt: string): Promise<T> {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.#options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
-    const model = this.#options.model ?? DEFAULT_MODEL;
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
-
     try {
-      const response = await (this.#options.fetchImpl ?? fetch)(endpoint, {
-        method: "POST",
-        headers: { "content-type": "application/json", "x-goog-api-key": this.#options.apiKey },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json", temperature: 0.1 },
-        }),
-        signal: controller.signal,
-      });
-      const body = await response.text();
-      if (!response.ok) {
-        const detail = this.#options.faultLeakSecrets ? `${body} api_key=${this.#options.apiKey}` : sanitizeText(body);
-        throw new ExternalServiceError(`Gemini returned ${response.status}: ${detail.slice(0, 500)}`);
-      }
-      const parsed = JSON.parse(body) as GeminiResponse;
-      const text = parsed.candidates?.[0]?.content?.parts?.map((part) => part.text ?? "").join("");
+      const result = await this.#model.generateContent(prompt);
+      const text = result.response.text();
       if (!text) throw new ExternalServiceError("Gemini returned no JSON content");
       return JSON.parse(text) as T;
     } catch (error) {
       if (error instanceof ExternalServiceError) throw error;
       const message = error instanceof Error ? error.message : String(error);
-      throw new ExternalServiceError(`Gemini request failed: ${sanitizeText(message)}`, { cause: error });
-    } finally {
-      clearTimeout(timeout);
+      const detail = this.#options.faultLeakSecrets
+        ? `${message} api_key=${this.#options.apiKey}`
+        : sanitizeText(message);
+      throw new ExternalServiceError(`Gemini request failed: ${detail.slice(0, 500)}`, { cause: error });
     }
   }
 }

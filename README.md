@@ -86,7 +86,6 @@ Offline deterministic extraction is always available. In `auto` mode, Docsworn u
 
 ```bash
 export GEMINI_API_KEY="..."
-export GEMINI_MODEL="gemini-3.8-flash" # optional
 docsworn --repo ./project --url https://app.example.com --ai auto
 ```
 

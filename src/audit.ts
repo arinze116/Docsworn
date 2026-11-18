@@ -49,13 +49,13 @@ export async function auditDocumentation(options: AuditOptions): Promise<AuditOu
     let claims = extractClaims(documents, options.maxClaims);
     if (claims.length === 0) throw new InputError("No behavioral documentation claims were found");
 
-    const apiKey = process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     const wantsGemini = options.aiMode === "gemini" || (options.aiMode === "auto" && Boolean(apiKey));
     const gemini = wantsGemini && apiKey
-      ? new GeminiClient({ apiKey, ...(process.env.GEMINI_MODEL ? { model: process.env.GEMINI_MODEL } : {}) })
+      ? new GeminiClient({ apiKey })
       : undefined;
     let usedGemini = false;
-    if (options.aiMode === "gemini" && !gemini) throw new InputError("Gemini mode requires GEMINI_API_KEY or GOOGLE_API_KEY");
+    if (options.aiMode === "gemini" && !gemini) throw new InputError("Gemini mode requires GEMINI_API_KEY");
     if (gemini) {
       try {
         claims = await refineClaimsWithGemini(gemini, claims);

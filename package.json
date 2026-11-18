@@ -41,6 +41,7 @@
     "cli"
   ],
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "commander": "15.1.0"
   },
   "devDependencies": {

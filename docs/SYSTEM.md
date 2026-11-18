@@ -35,7 +35,7 @@
 - R-SECRET-1: credentials never enter prompts, reports or logs; external error text is redacted.
 - R-INPUT-1: remote repositories are HTTPS GitHub owner/repo URLs and commands never use a shell.
 - R-BOUNDS-1: document count and bytes are bounded before model or flow generation.
-- R-FALLBACK-1: Gemini failure falls back to deterministic extraction/fix logic in auto mode.
+- R-FALLBACK-1: Gemini SDK failure falls back to deterministic extraction/fix logic in auto mode.
 - R-KANE-FORMAT-1: generated `_test.md` files use only documented Kane frontmatter keys and keep source traceability in ordinary Markdown.
 - R-HOSTED-AUTH-1: only the Vercel proxy can invoke the VPS worker; the shared secret is timing-safe compared, never returned and never logged.
 - R-HOSTED-INPUT-1: hosted audits accept only canonical GitHub repositories that are either reachable without credentials or exactly match the one server-configured read-only mirror; target URLs must be public HTTPS with no credentials, fragments or non-standard ports.
@@ -48,7 +48,7 @@
 
 ## Architecture
 
-A modular local Node CLI reads one repository, extracts traceable claims, writes Kane Markdown tests, runs them sequentially, and writes a report. GitHub cloning uses a scoped temporary directory. Gemini is optional.
+A modular local Node CLI reads one repository, extracts traceable claims, writes Kane Markdown tests, runs them sequentially, and writes a report. GitHub cloning uses a scoped temporary directory. Gemini is optional and uses `@google/generative-ai` with the fixed `gemini-1.5-flash` model when `GEMINI_API_KEY` is present.
 
 The hosted path is deliberately split. Vercel serves the interface and a same-origin `/api/check` function. That function validates and bounds the request, adds the authenticated worker header and proxies it over TLS. Before admission, the VPS worker either uses a bounded unauthenticated `HEAD` request to confirm that GitHub exposes the submitted repository publicly or matches the URL to one owner-configured repository mirror. It then applies global and per-IP limits and starts one disposable Docker audit container. Public repositories are cloned inside the container; the configured mirror is mounted read-only at `/work/repository`. The container receives the public target URL, a bounded workspace and the existing Kane profile mount, runs Docsworn with Kane, returns structured JSON and is removed. The worker retains only rolling usage counters. No report is persisted by the service, and no GitHub credential enters the container.
 

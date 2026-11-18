@@ -10,11 +10,11 @@
 
 ### Gemini client
 - **Owns:** optional model request and JSON response parsing.
-- **Promises:** bounded timeout, key sent only in a header, sanitized errors, deterministic fallback in auto mode.
-- **Depends on:** Gemini Developer API.
+- **Promises:** fixed `gemini-1.5-flash` model, bounded timeout, `GEMINI_API_KEY` authentication through the SDK, sanitized errors, deterministic fallback in auto mode.
+- **Depends on:** Gemini Developer API through `@google/generative-ai`.
 - **Fails how:** timeout/error raises an external-service error; caller falls back unless strict Gemini mode.
 - **Hard part:** useful enhancement without making the demo quota-dependent.
-- **Red tests:** `R-SECRET-1 redacts API key from provider error` and Gemini timeout tests.
+- **Red tests:** `R-SECRET-1 redacts API key from provider error`, SDK model/timeout configuration and `R-FALLBACK-1` pipeline fallback tests.
 
 ### Kane runner
 - **Owns:** invocation, NDJSON parsing, exit-code mapping and observation summaries.

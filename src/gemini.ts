@@ -4,7 +4,7 @@ import { ExternalServiceError } from "./errors.js";
 import { sanitizeText } from "./sanitize.js";
 import type { DocClaim } from "./types.js";
 
-const DEFAULT_MODEL = "gemini-1.5-flash";
+const DEFAULT_MODEL = "gemini-3.5-flash-lite";
 const DEFAULT_TIMEOUT_MS = 15_000;
 
 export interface GeminiOptions {

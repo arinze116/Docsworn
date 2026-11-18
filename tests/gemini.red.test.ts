@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 describe("Gemini SDK client", () => {
-  it("uses the Google SDK with gemini-1.5-flash and JSON output", async () => {
+  it("R-GEMINI-MODEL-1 uses the verified gemini-3.5-flash-lite model with JSON output", async () => {
     sdk.generateContent.mockResolvedValue({ response: { text: () => '{"ok":true}' } });
 
     const result = await new GeminiClient({ apiKey: "test-key" }).generateJson<{ ok: boolean }>("return JSON");
@@ -29,7 +29,7 @@ describe("Gemini SDK client", () => {
     expect(sdk.GoogleGenerativeAI).toHaveBeenCalledWith("test-key");
     expect(sdk.getGenerativeModel).toHaveBeenCalledWith(
       {
-        model: "gemini-1.5-flash",
+        model: "gemini-3.5-flash-lite",
         generationConfig: { responseMimeType: "application/json", temperature: 0.1 },
       },
       { timeout: 15_000 },

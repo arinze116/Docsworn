@@ -1,6 +1,6 @@
 # ADR-0007: Use the Google Gemini SDK for optional AI refinement
 - Date (with zone): 2026-11-18 Africa/Lagos
-- Status: accepted
+- Status: superseded by ADR-0008
 - Rule ids affected: R-TIMEOUT-1, R-SECRET-1, R-FALLBACK-1
 
 ## Context

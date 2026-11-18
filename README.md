@@ -82,7 +82,7 @@ Reports label this mode as `captured-kane`; it is not presented as a current liv
 
 ## Optional Gemini refinement
 
-Offline deterministic extraction is always available. In `auto` mode, Docsworn uses Gemini only when a key is present and falls back if the request fails.
+Offline deterministic extraction is always available. In `auto` mode, Docsworn uses the compatibility-tested `gemini-3.5-flash-lite` model only when a key is present and falls back if the request fails.
 
 ```bash
 export GEMINI_API_KEY="..."

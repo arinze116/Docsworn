@@ -20,9 +20,9 @@ The demo reads [`demo/fixture-app/README.md`](demo/fixture-app/README.md), gener
 
 ## Browser demo
 
-Open [docsworn.vercel.app](https://docsworn.vercel.app), enter a public GitHub repository URL and a public HTTPS application URL, then run the documentation check. The hosted path confirms that the repository is publicly reachable, clones it into a disposable isolated container, extracts one focused claim and runs a live Kane browser check. The report includes the claim's source line, exact observation, suggested correction and LambdaTest evidence when Kane returns a session URL.
+Open [docsworn.vercel.app](https://docsworn.vercel.app), enter a supported GitHub repository URL and a public HTTPS application URL, then run the documentation check. The hosted path either confirms that the repository is publicly reachable or matches the one server-configured read-only mirror, extracts one focused claim in a disposable isolated container and runs a live Kane browser check. The report includes the claim's source line, exact observation, suggested correction and LambdaTest evidence when Kane returns a session URL.
 
-The hosted path is intentionally bounded to one concurrent job and one claim per request. It does not accept private repositories or persist the clone or report. Use the local CLI below for private repositories, more claims and repeatable CI audits.
+The hosted path is intentionally bounded to one concurrent job and one claim per request. Arbitrary private repositories are rejected; the production worker may expose one owner-authorized repository through a read-only server mirror. The worker does not persist clones or reports. Use the local CLI below for other private repositories, more claims and repeatable CI audits.
 
 ## Run against a live application
 

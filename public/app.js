@@ -60,12 +60,12 @@ function appendText(parent, tagName, className, text) {
 
 function statusPresentation(status) {
   return {
-    passed: { label: "Passed", icon: "✓", className: "claim-passed" },
-    failed: { label: "Failed", icon: "×", className: "claim-failed" },
-    unverifiable: { label: "Unverifiable", icon: "!", className: "claim-warning" },
-    error: { label: "Runner error", icon: "!", className: "claim-warning" },
-    pending: { label: "Pending", icon: "…", className: "claim-warning" },
-  }[status] ?? { label: "Unknown", icon: "?", className: "claim-warning" };
+    passed: { label: "Passed", className: "claim-passed" },
+    failed: { label: "Failed", className: "claim-failed" },
+    unverifiable: { label: "Unverifiable", className: "claim-warning" },
+    error: { label: "Runner error", className: "claim-warning" },
+    pending: { label: "Pending", className: "claim-warning" },
+  }[status] ?? { label: "Unknown", className: "claim-warning" };
 }
 
 function correctionText(audited) {
@@ -92,8 +92,8 @@ function createEvidenceCard(audited, index) {
   const header = appendText(article, "header", "evidence-card-header", "");
   const status = appendText(header, "p", "claim-status", presentation.label);
   const icon = document.createElement("span");
+  icon.className = "status-icon";
   icon.setAttribute("aria-hidden", "true");
-  icon.textContent = presentation.icon;
   status.prepend(icon);
   appendText(header, "code", "", `${audited.claim.sourceFile}:${audited.claim.line}`);
 
@@ -114,7 +114,9 @@ function createEvidenceCard(audited, index) {
   const session = appendText(article, "p", "session-link", "");
   appendText(session, "strong", "", "Kane session");
   if (audited.observation.sessionUrl) {
-    const link = appendText(session, "a", "", "Open LambdaTest evidence ↗");
+    const link = appendText(session, "a", "", "Open LambdaTest evidence");
+    const arrow = appendText(link, "span", "arrow-icon", "");
+    arrow.setAttribute("aria-hidden", "true");
     link.href = audited.observation.sessionUrl;
     link.target = "_blank";
     link.rel = "noreferrer";
@@ -219,6 +221,7 @@ async function runBrowserAudit(form) {
   const repositoryInput = form.elements.namedItem("repository");
   const targetInput = form.elements.namedItem("target");
   const button = document.querySelector("#run-button");
+  const buttonLabel = button.querySelector(".button-label");
   const status = document.querySelector("#run-status");
   const runError = document.querySelector("#run-error");
   const report = document.querySelector("#report");
@@ -241,7 +244,7 @@ async function runBrowserAudit(form) {
   repositoryInput.disabled = true;
   targetInput.disabled = true;
   button.disabled = true;
-  button.textContent = "Running documentation check…";
+  buttonLabel.textContent = "Running documentation check...";
   status.dataset.state = "loading";
   status.textContent = "Cloning the documentation and running a real browser check. This can take one to two minutes.";
   for (const target of document.querySelectorAll("[data-repository-name]")) target.textContent = repository.repository;
@@ -282,7 +285,7 @@ async function runBrowserAudit(form) {
     repositoryInput.disabled = false;
     targetInput.disabled = false;
     button.disabled = false;
-    button.textContent = button.dataset.idleLabel;
+    buttonLabel.textContent = button.dataset.idleLabel;
   }
 }
 

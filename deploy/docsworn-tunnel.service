@@ -1,8 +1,7 @@
 [Unit]
 Description=Docsworn outbound HTTPS tunnel
-Requires=docsworn-worker.service nginx.service
 After=docsworn-worker.service nginx.service network-online.target
-Wants=network-online.target
+Wants=docsworn-worker.service nginx.service network-online.target
 
 [Service]
 Type=simple

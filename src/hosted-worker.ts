@@ -3,6 +3,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { rm } from "node:fs/promises";
 
 import { DockerAuditRunner } from "./hosted/docker-runner.js";
+import type { RepositoryMirror } from "./hosted/docker-runner.js";
 import { createHostedCheckService } from "./hosted/service.js";
 import { FileUsageStore } from "./hosted/usage-store.js";
 
@@ -25,6 +26,16 @@ function integerEnvironment(name: string, fallback: number): number {
   return value;
 }
 
+function repositoryMirrorFromEnvironment(): RepositoryMirror | undefined {
+  const repositoryUrl = process.env.DOCSWORN_TRUSTED_REPOSITORY_URL;
+  const sourcePath = process.env.DOCSWORN_TRUSTED_REPOSITORY_PATH;
+  if (!repositoryUrl && !sourcePath) return undefined;
+  if (!repositoryUrl || !sourcePath) {
+    throw new Error("DOCSWORN_TRUSTED_REPOSITORY_URL and DOCSWORN_TRUSTED_REPOSITORY_PATH must be set together");
+  }
+  return { repositoryUrl, sourcePath };
+}
+
 async function readJsonBody(request: IncomingMessage): Promise<unknown> {
   let body = "";
   for await (const chunk of request) {
@@ -45,6 +56,7 @@ function send(response: ServerResponse, statusCode: number, body: object, header
 
 async function main(): Promise<void> {
   const socketPath = process.env.DOCSWORN_WORKER_SOCKET ?? "/run/docsworn-worker/api.sock";
+  const repositoryMirror = repositoryMirrorFromEnvironment();
   const service = createHostedCheckService({
     workerToken: requiredEnvironment("DOCSWORN_WORKER_TOKEN"),
     runner: new DockerAuditRunner({
@@ -56,6 +68,7 @@ async function main(): Promise<void> {
       maxClaims: integerEnvironment("DOCSWORN_MAX_CLAIMS", 3),
       kaneTimeoutMs: integerEnvironment("DOCSWORN_KANE_TIMEOUT_MS", 70_000),
       jobsRoot: process.env.DOCSWORN_JOBS_ROOT ?? "/var/lib/docsworn-worker/jobs",
+      ...(repositoryMirror ? { repositoryMirror } : {}),
     }),
     usageStore: new FileUsageStore(
       process.env.DOCSWORN_USAGE_FILE ?? "/var/lib/docsworn-worker/usage.json",
@@ -64,6 +77,7 @@ async function main(): Promise<void> {
         cooldownMs: integerEnvironment("DOCSWORN_IP_COOLDOWN_MS", 900_000),
       },
     ),
+    ...(repositoryMirror ? { validation: { trustedRepositoryUrl: repositoryMirror.repositoryUrl } } : {}),
     log: (message) => console.log(message),
   });
 

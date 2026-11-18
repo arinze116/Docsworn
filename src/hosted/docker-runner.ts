@@ -17,7 +17,13 @@ export interface DockerRunnerOptions {
   maxClaims: number;
   kaneTimeoutMs: number;
   jobsRoot?: string;
+  repositoryMirror?: RepositoryMirror;
   execute?: typeof runCommand;
+}
+
+export interface RepositoryMirror {
+  repositoryUrl: string;
+  sourcePath: string;
 }
 
 function containerName(requestId: string): string {
@@ -67,6 +73,7 @@ export class DockerAuditRunner {
     name: string;
     jobRoot: string;
   }): string[] {
+    const repositoryMirrorArguments = this.repositoryMirrorArguments(input.request);
     return [
       "run", "--rm", "--init", "--name", input.name,
       "--network", this.options.network,
@@ -80,12 +87,22 @@ export class DockerAuditRunner {
       "--mount", `type=bind,src=${input.jobRoot},dst=/work/output`,
       "--mount", `type=bind,src=${this.options.kaneProfilePath},dst=/home/ubuntu/.testmuai`,
       "--mount", `type=bind,src=${this.options.runnerCachePath},dst=/home/ubuntu/.cache/v16-runner,readonly`,
+      ...repositoryMirrorArguments,
       "--env", `DOCSWORN_REQUEST_ID=${input.requestId}`,
       "--env", `DOCSWORN_REPOSITORY_URL=${input.request.repositoryUrl}`,
       "--env", `DOCSWORN_TARGET_URL=${input.request.targetUrl}`,
       "--env", `DOCSWORN_MAX_CLAIMS=${this.options.maxClaims}`,
       "--env", `DOCSWORN_KANE_TIMEOUT_MS=${this.options.kaneTimeoutMs}`,
       this.options.image,
+    ];
+  }
+
+  private repositoryMirrorArguments(request: HostedCheckRequest): string[] {
+    const mirror = this.options.repositoryMirror;
+    if (!mirror || mirror.repositoryUrl.toLowerCase() !== request.repositoryUrl.toLowerCase()) return [];
+    return [
+      "--mount", `type=bind,src=${mirror.sourcePath},dst=/work/repository,readonly`,
+      "--env", "DOCSWORN_REPOSITORY_PATH=/work/repository",
     ];
   }
 }

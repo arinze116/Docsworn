@@ -58,8 +58,16 @@
 
 ### hosted Kane worker
 - **Owns:** authenticated admission, public URL resolution, per-IP/daily limits, single-flight execution, container lifecycle and structured result validation.
-- **Promises:** repository visibility is checked without credentials and within a five-second deadline before admission; only one bounded disposable audit container runs; repository files and results are deleted with the container; session URLs must be LambdaTest HTTPS URLs (R-TIMEOUT-1, R-HOSTED-INPUT-1, R-HOSTED-ISOLATION-1, R-HOSTED-BOUNDS-1, R-HOSTED-TRUTH-1).
+- **Promises:** repository visibility is checked without credentials and within a five-second deadline before admission, unless the URL exactly matches the one configured read-only mirror; only one bounded disposable audit container runs; public clones and results are deleted with the container; the configured mirror is mounted read-only; session URLs must be LambdaTest HTTPS URLs (R-TIMEOUT-1, R-HOSTED-INPUT-1, R-HOSTED-ISOLATION-1, R-HOSTED-BOUNDS-1, R-HOSTED-TRUTH-1).
 - **Depends on:** Docker, GitHub, the target app, Kane/LambdaTest, the mounted Kane profile and a restricted Docker network.
 - **Fails how:** unauthorized=401, invalid=400, rate/daily=429, busy=503, job timeout/provider/container failure=502/504; all are sanitized.
 - **Hard part:** exposing useful live execution without turning Kane credits or the VPS browser into an unbounded public resource.
-- **Red tests:** bad auth, private target, private repository, repository-check timeout, oversized body, full worker, rate limit, daily cap, container timeout, secret-log canary and invalid session URL.
+- **Red tests:** bad auth, private target, unconfigured private repository, configured mirror admission and read-only mount, repository-check timeout, oversized body, full worker, rate limit, daily cap, container timeout, secret-log canary and invalid session URL.
+
+### hosted service deployment
+- **Owns:** worker, loopback Nginx and outbound quick-tunnel lifecycle.
+- **Promises:** worker or Nginx restarts do not rotate the quick-tunnel hostname; an intentional tunnel restart is followed by a Vercel worker-URL update and deployment (R-HOSTED-AVAILABILITY-1).
+- **Depends on:** systemd, Nginx, cloudflared and the Vercel production environment.
+- **Fails how:** a stale tunnel hostname returns a non-JSON Cloudflare response that the Vercel proxy safely maps to `INVALID_WORKER_RESPONSE`.
+- **Hard part:** accountless quick tunnels have generated hostnames and no uptime guarantee.
+- **Red tests:** the tunnel unit uses `Wants`, not `Requires`, for the worker and Nginx services.

@@ -33,6 +33,7 @@ describe("R-BROWSER-DEMO-1 Vercel browser demo", () => {
     expect(html).toContain('type="url"');
     expect(html).toContain('type="submit"');
     expect(html).toContain("Run documentation check");
+    expect(html).toContain('class="button-label"');
     expect(html).toContain('id="run-status"');
     expect(html).toContain('id="run-error"');
     expect(html).toContain('aria-live="polite"');
@@ -46,9 +47,13 @@ describe("R-BROWSER-DEMO-1 Vercel browser demo", () => {
     expect(html).toContain('href="/brand/favicon.svg"');
     expect(html).toContain('href="/brand/apple-touch-icon.png"');
     expect(html).toContain('src="/brand/mark-light.svg"');
+    expect(html).toContain('class="arrow-icon"');
+    expect(html).toContain('class="evidence-mark"');
+    expect(html).not.toMatch(/[↗◎]/);
     expect(html).toContain('<script type="module" src="/app.js"></script>');
     expect(html).not.toMatch(/ANTHROPIC_API_KEY|KANE_API_KEY|GEMINI_API_KEY|LT_ACCESS_KEY/);
     expect(javascript).toContain('fetchImpl("/api/check"');
+    expect(javascript).toContain('querySelector(".button-label")');
     expect(javascript).toContain('setAttribute("aria-invalid", "true")');
     expect(javascript).toContain("audited.claim.sourceFile");
     expect(javascript).toContain("audited.claim.line");
@@ -57,7 +62,10 @@ describe("R-BROWSER-DEMO-1 Vercel browser demo", () => {
     expect(javascript).toContain("audited.observation.sessionUrl");
     expect(javascript).toContain('"Correct the record"');
     expect(javascript).toContain("result.summary.error");
+    expect(javascript).not.toMatch(/[✓×…↗]/);
     expect(javascript).not.toMatch(/XMLHttpRequest|WebSocket/);
+    expect(css).toContain(".arrow-icon::before");
+    expect(css).toContain(".claim-passed .status-icon::before");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain(":focus-visible");
   });

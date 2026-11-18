@@ -17,6 +17,7 @@ export interface HostedValidationOptions {
   resolveHostname?: (hostname: string) => Promise<AddressRecord[]>;
   isAddressAllowed?: (address: string) => boolean;
   repositoryIsPublic?: (repositoryUrl: URL) => Promise<boolean>;
+  trustedRepositoryUrl?: string;
 }
 
 export interface GitHubRepositoryCheckOptions {
@@ -84,6 +85,12 @@ export async function checkPublicGitHubRepository(
   }
 }
 
+function isTrustedRepository(repositoryUrl: URL, trustedRepositoryUrl?: string): boolean {
+  if (!trustedRepositoryUrl) return false;
+  const trustedUrl = parseGitHubUrl(trustedRepositoryUrl);
+  return trustedUrl?.toString().toLowerCase() === repositoryUrl.toString().toLowerCase();
+}
+
 function parseTargetUrl(input: string): URL {
   if (input.length > MAX_URL_LENGTH) throw new HostedRequestError("Live application URL is too long", 400, "INVALID_TARGET_URL");
   let url: URL;
@@ -131,8 +138,9 @@ export async function validateHostedCheckRequest(
   }
   const targetUrl = parseTargetUrl(body.targetUrl.trim());
   await resolvePublicTarget(targetUrl, options);
+  const isTrustedMirror = isTrustedRepository(repositoryUrl, options.trustedRepositoryUrl);
   const repositoryIsPublic = options.repositoryIsPublic ?? checkPublicGitHubRepository;
-  if (!await repositoryIsPublic(repositoryUrl)) {
+  if (!isTrustedMirror && !await repositoryIsPublic(repositoryUrl)) {
     throw new HostedRequestError(
       "GitHub repository must exist and be publicly accessible",
       400,

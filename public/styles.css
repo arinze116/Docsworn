@@ -389,6 +389,56 @@ h1 span {
   cursor: wait;
 }
 
+.arrow-icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.arrow-icon::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 7px;
+  height: 7px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  content: "";
+}
+
+.arrow-icon::after {
+  position: absolute;
+  left: 1px;
+  bottom: 3px;
+  width: 10px;
+  height: 1.5px;
+  background: currentColor;
+  content: "";
+  transform: rotate(-45deg);
+  transform-origin: center;
+}
+
+.evidence-mark {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  flex: 0 0 auto;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+
+.evidence-mark::after {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
 .form-meta {
   min-height: 24px;
   display: grid;
@@ -775,13 +825,46 @@ h1 span {
   text-transform: uppercase;
 }
 
-.claim-status span {
+.claim-status .status-icon {
+  position: relative;
   display: inline-grid;
   width: 22px;
   height: 22px;
   place-items: center;
   border: 1px solid currentColor;
   border-radius: 50%;
+}
+
+.claim-passed .status-icon::before {
+  width: 5px;
+  height: 9px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  content: "";
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.claim-failed .status-icon::before,
+.claim-failed .status-icon::after {
+  position: absolute;
+  width: 9px;
+  height: 1.5px;
+  background: currentColor;
+  content: "";
+}
+
+.claim-failed .status-icon::before {
+  transform: rotate(45deg);
+}
+
+.claim-failed .status-icon::after {
+  transform: rotate(-45deg);
+}
+
+.claim-warning .status-icon::before {
+  content: "!";
+  font-size: 0.72rem;
+  font-weight: 800;
 }
 
 .claim-passed .claim-status {
@@ -876,6 +959,7 @@ h1 span {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   color: var(--focus);
   font-weight: 700;
   overflow-wrap: anywhere;

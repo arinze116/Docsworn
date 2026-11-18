@@ -20,9 +20,11 @@ function boundedInteger(name: string, fallback: number, minimum: number, maximum
 
 async function main(): Promise<void> {
   const requestId = requiredEnvironment("DOCSWORN_REQUEST_ID");
+  const repositoryUrl = requiredEnvironment("DOCSWORN_REPOSITORY_URL");
+  const repositorySource = process.env.DOCSWORN_REPOSITORY_PATH ?? repositoryUrl;
   const outputRoot = "/work/output";
   const result = await auditDocumentation({
-    repo: requiredEnvironment("DOCSWORN_REPOSITORY_URL"),
+    repo: repositorySource,
     targetUrl: requiredEnvironment("DOCSWORN_TARGET_URL"),
     outputPath: path.join(outputRoot, "report.md"),
     flowsDirectory: path.join("/tmp", "flows"),
@@ -33,7 +35,7 @@ async function main(): Promise<void> {
     aiMode: "off",
     maxClaims: boundedInteger("DOCSWORN_MAX_CLAIMS", 3, 1, 3),
   });
-  const response: HostedCheckResponse = { ...result, requestId };
+  const response: HostedCheckResponse = { ...result, repository: repositoryUrl, requestId };
   await writeFile(path.join(outputRoot, "result.json"), JSON.stringify(response), "utf8");
 }
 

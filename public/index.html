@@ -70,7 +70,7 @@
                     />
                   </div>
                   <div class="form-meta">
-                    <p class="field-help" id="repo-help">Public GitHub repository containing the documentation.</p>
+                    <p class="field-help" id="repo-help">Public GitHub repository, or the configured Docsworn repository.</p>
                     <p class="field-error" id="repo-error" hidden></p>
                   </div>
                 </div>
@@ -96,13 +96,13 @@
                 </div>
               </div>
               <button class="audit-action" id="run-button" type="submit" data-idle-label="Run documentation check">
-                Run documentation check <span aria-hidden="true">↗</span>
+                <span class="button-label">Run documentation check</span><span class="arrow-icon" aria-hidden="true"></span>
               </button>
               <p class="run-status" id="run-status" role="status" aria-live="polite" aria-atomic="true"></p>
               <p class="run-error" id="run-error" role="alert" hidden></p>
             </form>
             <p class="demo-disclosure">
-              <span aria-hidden="true">◎</span> Live hosted audit · isolated temporary clone · one focused claim · workspace deleted after the run.
+              <span class="evidence-mark" aria-hidden="true"></span> Live hosted audit · isolated temporary clone · one focused claim · workspace deleted after the run.
             </p>
             <noscript><p class="field-error noscript">JavaScript is required for the hosted audit. The local CLI remains fully available.</p></noscript>
           </div>
@@ -155,7 +155,7 @@
             <article class="evidence-empty">
               <p class="section-label"><span aria-hidden="true"></span> Awaiting evidence</p>
               <h3>Run a documentation check to produce source-linked evidence.</h3>
-              <p>Submit a public GitHub repository and its live application URL above.</p>
+              <p>Submit a supported GitHub repository and its live application URL above.</p>
             </article>
           </div>
         </div>
@@ -169,7 +169,7 @@
             <p>
               Docsworn reads Markdown like a contract: it isolates testable behavior, creates one Kane check per promise and brings the observation back to the sentence that made the claim.
             </p>
-            <a href="#quickstart">Run it where the code lives <span aria-hidden="true">↗</span></a>
+            <a href="#quickstart">Run it where the code lives <span class="arrow-icon" aria-hidden="true"></span></a>
           </div>
 
           <ol class="method-list">
@@ -190,7 +190,7 @@
             <p>
               The hosted path runs the same pipeline in a disposable bounded container. The local CLI remains the unrestricted path for private repositories, more claims and repeatable CI audits.
             </p>
-            <a href="#limits">Read the exact deployment status <span aria-hidden="true">↗</span></a>
+            <a href="#limits">Read the exact deployment status <span class="arrow-icon" aria-hidden="true"></span></a>
           </div>
           <pre aria-label="Docsworn quickstart command"><code><span class="terminal-note"># install, verify, inspect</span>
 <span class="prompt">$</span> npm ci

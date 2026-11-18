@@ -44,6 +44,36 @@ describe("hosted audit security rules", () => {
     )).rejects.toMatchObject({ code: "PRIVATE_REPOSITORY", statusCode: 400 });
   });
 
+  it("R-HOSTED-INPUT-1 accepts only the configured private repository mirror", async () => {
+    const result = await validateHostedCheckRequest(
+      {
+        repositoryUrl: "https://github.com/arinze116/Docsworn",
+        targetUrl: "https://docsworn.vercel.app",
+      },
+      {
+        resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }],
+        repositoryIsPublic: async () => false,
+        trustedRepositoryUrl: "https://github.com/arinze116/Docsworn",
+      },
+    );
+
+    expect(result.repositoryUrl).toBe("https://github.com/arinze116/Docsworn");
+  });
+
+  it("R-HOSTED-INPUT-1 still rejects a different private repository", async () => {
+    await expect(validateHostedCheckRequest(
+      {
+        repositoryUrl: "https://github.com/owner/private-repository",
+        targetUrl: "https://docsworn.vercel.app",
+      },
+      {
+        resolveHostname: async () => [{ address: "76.76.21.21", family: 4 }],
+        repositoryIsPublic: async () => false,
+        trustedRepositoryUrl: "https://github.com/arinze116/Docsworn",
+      },
+    )).rejects.toMatchObject({ code: "PRIVATE_REPOSITORY", statusCode: 400 });
+  });
+
   it("R-TIMEOUT-1 bounds the public GitHub repository check", async () => {
     const timeoutMs = process.env.FAULT_DISABLE_REPOSITORY_CHECK_TIMEOUT === "1" ? 1_000 : 20;
     await expect(checkPublicGitHubRepository(

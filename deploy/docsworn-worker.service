@@ -11,6 +11,7 @@ Group=www-data
 SupplementaryGroups=docker
 WorkingDirectory=/home/ubuntu/Docsworn
 EnvironmentFile=/etc/docsworn-worker.env
+EnvironmentFile=-/etc/docsworn-worker-mirror.env
 ExecStart=/usr/bin/node /home/ubuntu/Docsworn/dist/hosted-worker.js
 Restart=on-failure
 RestartSec=5

@@ -2,7 +2,7 @@
 
 ## Product and screen job
 
-Docsworn turns behavioral documentation claims into Kane CLI checks and a Documentation Truth Report. The public site serves KaneCLI hackathon judges, OSS maintainers, solo developers and technical writers. Its primary job is to let a visitor enter a public GitHub repository URL and visibly experience the repository-to-report flow. It is a static demonstration using labelled captured evidence; local CLI execution remains the real audit path.
+Docsworn turns behavioral documentation claims into Kane CLI checks and a Documentation Truth Report. The public site serves KaneCLI hackathon judges, OSS maintainers, solo developers and technical writers. Its primary job is to let a visitor enter a supported GitHub repository URL and visibly experience the repository-to-report flow through a real hosted Kane run. Public repositories are cloned ephemerally; the owner-authorized Docsworn repository is supplied through one read-only worker mirror. The local CLI remains the unrestricted audit path.
 
 Priority viewports: 1440 px laptop, 768 px tablet and 390 px phone.
 
@@ -37,7 +37,7 @@ Supporting references:
 │        Find every promise. Test the product. Keep receipts.      │
 │                                                                  │
 │  [ https://github.com/owner/repository       ][Run doc check →]  │
-│        Captured evidence disclosure · public GitHub only         │
+│      Live evidence disclosure · supported GitHub repository     │
 │                                                                  │
 │   README ─── Claims ─── Kane ─── Observations ─── Doc fix        │
 └──────────────────────────────────────────────────────────────────┘

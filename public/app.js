@@ -161,7 +161,8 @@ function renderLiveReport(result) {
   const score = result.summary.accuracyPercent;
   const scoreValue = document.querySelector("[data-score-value]");
   scoreValue.textContent = score === null ? "N/A" : String(score);
-  scoreValue.toggleAttribute("data-score-state", score === null);
+  if (score === null) scoreValue.dataset.scoreState = "empty";
+  else scoreValue.removeAttribute("data-score-state");
   const reportTitle = result.summary.error
     ? "The audit could not<br /> reach a verdict."
     : result.summary.failed

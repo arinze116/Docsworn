@@ -40,7 +40,7 @@ describe("Gemini SDK client", () => {
 
 describe("R-SECRET-1 Gemini errors", () => {
   it("never includes the API key in a provider error", async () => {
-    const apiKey = "AIzaTEST_SUPER_SECRET_TOKEN_123456";
+    const apiKey = "test-key-not-a-real-google-key";
     sdk.generateContent.mockRejectedValue(new Error(`Gemini returned 500: api_key=${apiKey}`));
     const client = new GeminiClient({
       apiKey,
